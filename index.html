@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mag Flow Meter Calculator</title>
+    <title>Advanced Mag Flow Meter Calculator</title>
     <style>
         :root {
             --primary: #0056b3;
             --success: #28a745;
             --danger: #dc3545;
+            --warning: #ffc107;
             --bg: #f4f7f6;
             --card: #ffffff;
             --text: #333333;
+            --light-gray: #f8f9fa;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -30,7 +32,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 450px;
+            max-width: 600px;
             box-sizing: border-box;
         }
         h2, h3 {
@@ -41,6 +43,13 @@
         h2 {
             border-bottom: 2px solid #eef2f5;
             padding-bottom: 12px;
+            font-size: 24px;
+        }
+        h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
         }
         .input-group {
             margin-bottom: 16px;
@@ -50,6 +59,11 @@
             margin-bottom: 6px;
             font-weight: bold;
             font-size: 14px;
+        }
+        .label-small {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
         }
         input, select {
             width: 100%;
@@ -63,6 +77,7 @@
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
         }
         .row {
             display: flex;
@@ -70,6 +85,36 @@
         }
         .row .input-group {
             flex: 1;
+            margin-bottom: 16px;
+        }
+        .row.triple .input-group {
+            flex: 1;
+        }
+        .parameter-section {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        .parameter-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .param-box {
+            display: flex;
+            flex-direction: column;
+        }
+        .param-box label {
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: #555;
+        }
+        .param-box input {
+            padding: 8px;
+            font-size: 14px;
         }
         .results-box {
             background: #eef5fc;
@@ -78,19 +123,43 @@
             border-radius: 4px;
             margin-top: 20px;
         }
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
         .result-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-size: 15px;
         }
         .result-item:last-child {
             margin-bottom: 0;
         }
+        .result-section {
+            background: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid var(--success);
+        }
+        .result-section h4 {
+            margin: 0 0 10px 0;
+            color: var(--primary);
+            font-size: 14px;
+        }
+        .result-item span:first-child {
+            font-weight: 600;
+            color: #555;
+        }
         .value {
             font-weight: bold;
             color: #111;
         }
+        .accuracy-high { color: var(--success); }
+        .accuracy-med { color: var(--warning); }
+        .accuracy-low { color: var(--danger); }
         .btn {
             width: 100%;
             padding: 12px;
@@ -104,6 +173,10 @@
         }
         .btn:hover {
             opacity: 0.9;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
         }
         .btn-save {
             background-color: var(--success);
@@ -131,7 +204,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 450px;
+            max-width: 600px;
             box-sizing: border-box;
         }
         .history-header {
@@ -173,7 +246,10 @@
 <body>
 
 <div class="calculator-card">
-    <h2>Mag Meter Calculator</h2>
+    <h2>⚙️ Advanced Mag Flow Meter Calculator</h2>
+    
+    <!-- PIPE CONFIGURATION SECTION -->
+    <h3>📏 Pipe Configuration</h3>
     
     <!-- Schedule 40 Presets -->
     <div class="input-group">
@@ -196,7 +272,7 @@
         </select>
     </div>
 
-    <div class="divider">OR EDIT DIMENSIONS MANUALLY</div>
+    <div class="divider">OR EDIT MANUALLY</div>
 
     <!-- Pipe Diameter Manual Inputs -->
     <div class="row">
@@ -214,59 +290,161 @@
         </div>
     </div>
 
-    <!-- Fluid Velocity Inputs -->
-    <div class="row">
-        <div class="input-group">
-            <label for="velocity">Fluid Velocity (V)</label>
-            <input type="number" id="velocity" value="2.5" step="any" oninput="calculateFlow()">
-        </div>
-        <div class="input-group">
-            <label for="velocityUnit">Unit</label>
-            <select id="velocityUnit" onchange="calculateFlow()">
-                <option value="m/s" selected>m/s</option>
-                <option value="ft/s">ft/s</option>
-            </select>
+    <!-- OPERATIONAL CONDITIONS SECTION -->
+    <h3>🌡️ Operational Conditions</h3>
+
+    <!-- PRESSURE PARAMETER -->
+    <div class="parameter-section">
+        <label>Pressure (bar)</label>
+        <span class="label-small">Set minimum, normal, and maximum pressure</span>
+        <div class="parameter-grid">
+            <div class="param-box">
+                <label>Min (bar)</label>
+                <input type="number" id="pressureMin" value="0" step="0.1" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Normal (bar)</label>
+                <input type="number" id="pressureNormal" value="1" step="0.1" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Max (bar)</label>
+                <input type="number" id="pressureMax" value="2" step="0.1" oninput="calculateAll()">
+            </div>
         </div>
     </div>
 
-    <!-- Output Calculations Block -->
+    <!-- TEMPERATURE PARAMETER -->
+    <div class="parameter-section">
+        <label>Temperature (°C)</label>
+        <span class="label-small">Set minimum, normal, and maximum temperature</span>
+        <div class="parameter-grid">
+            <div class="param-box">
+                <label>Min (°C)</label>
+                <input type="number" id="tempMin" value="0" step="0.1" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Normal (°C)</label>
+                <input type="number" id="tempNormal" value="20" step="0.1" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Max (°C)</label>
+                <input type="number" id="tempMax" value="50" step="0.1" oninput="calculateAll()">
+            </div>
+        </div>
+    </div>
+
+    <!-- FLUID VELOCITY -->
+    <div class="parameter-section">
+        <label>Fluid Velocity (m/s)</label>
+        <span class="label-small">Set minimum, normal, and maximum flow velocity</span>
+        <div class="parameter-grid">
+            <div class="param-box">
+                <label>Min (m/s)</label>
+                <input type="number" id="velocityMin" value="0.5" step="0.01" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Normal (m/s)</label>
+                <input type="number" id="velocityNormal" value="2.5" step="0.01" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Max (m/s)</label>
+                <input type="number" id="velocityMax" value="5.0" step="0.01" oninput="calculateAll()">
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULTS SECTION -->
     <div class="results-box">
-        <div class="result-item">
-            <span>Area (A):</span>
-            <span class="value" id="resArea">-</span>
+        <h3 style="margin-top: 0; margin-bottom: 15px;">📊 Calculation Results</h3>
+        
+        <div class="results-grid">
+            <!-- Left Column: Flow Calculations -->
+            <div class="result-section">
+                <h4>Flow Rates (Normal)</h4>
+                <div class="result-item">
+                    <span>Area (A):</span>
+                    <span class="value" id="resArea">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Flow (L/min):</span>
+                    <span class="value" id="resLPM">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Flow (m³/h):</span>
+                    <span class="value" id="resM3H">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Flow (GPM):</span>
+                    <span class="value" id="resGPM">-</span>
+                </div>
+            </div>
+
+            <!-- Right Column: Range Analysis -->
+            <div class="result-section">
+                <h4>Flow Range Analysis</h4>
+                <div class="result-item">
+                    <span>Min Flow (L/min):</span>
+                    <span class="value" id="resMinFlow">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Max Flow (L/min):</span>
+                    <span class="value" id="resMaxFlow">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Flow Range (L/min):</span>
+                    <span class="value" id="resFlowRange">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Velocity Change:</span>
+                    <span class="value" id="resVelChange">-</span>
+                </div>
+            </div>
         </div>
-        <div class="result-item">
-            <span>Flow Rate (L/min):</span>
-            <span class="value" id="resLPM">-</span>
-        </div>
-        <div class="result-item">
-            <span>Flow Rate (m³/h):</span>
-            <span class="value" id="resM3H">-</span>
-        </div>
-        <div class="result-item">
-            <span>Flow Rate (GPM):</span>
-            <span class="value" id="resGPM">-</span>
+
+        <!-- Accuracy Section -->
+        <div style="background: #fff3cd; border-left: 4px solid var(--warning); padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #856404;">Accuracy Analysis</h4>
+            <div class="result-item">
+                <span>System Accuracy:</span>
+                <span class="value" id="resAccuracy">-</span>
+            </div>
+            <div class="result-item">
+                <span>Accuracy Class:</span>
+                <span class="value" id="resAccuracyClass">-</span>
+            </div>
+            <div class="result-item">
+                <span>Temperature Effect:</span>
+                <span class="value" id="resTempEffect">-</span>
+            </div>
+            <div class="result-item">
+                <span>Pressure Effect:</span>
+                <span class="value" id="resPressureEffect">-</span>
+            </div>
         </div>
     </div>
 
-    <!-- Action Button to Save Log -->
-    <button class="btn btn-save" onclick="saveToHistory()">💾 Save Log Entry</button>
+    <!-- Action Buttons -->
+    <div class="row" style="margin-top: 20px;">
+        <button class="btn btn-primary" onclick="calculateAll()" style="flex: 1;">🔄 Recalculate</button>
+        <button class="btn btn-save" onclick="saveToHistory()" style="flex: 1;">💾 Save Log</button>
+    </div>
 </div>
 
 <!-- Offline Log Storage Card -->
 <div class="history-card">
     <div class="history-header">
-        <h3>Calculation History Log</h3>
+        <h3>📋 Calculation History</h3>
         <button class="btn-clear" onclick="clearHistory()">Clear All</button>
     </div>
     <div class="table-wrapper">
         <table>
             <thead>
                 <tr>
-                    <th>Size</th>
-                    <th>Velocity</th>
+                    <th>Diameter</th>
+                    <th>Velocity (m/s)</th>
                     <th>Flow (GPM)</th>
-                    <th>Flow (m³/h)</th>
+                    <th>Accuracy</th>
+                    <th>Vel. Change</th>
                 </tr>
             </thead>
             <tbody id="historyTableBody">
@@ -277,8 +455,14 @@
 </div>
 
 <script>
-// Keep global memory objects tracking current computations
-let currentOutputs = { dStr: '', vStr: '', gpm: '-', m3h: '-' };
+// Global state for current computations
+let currentOutputs = {
+    diameter: '',
+    velocityNormal: '',
+    flowGPM: '',
+    accuracy: '',
+    velChange: ''
+};
 
 function applyPreset() {
     let presetValue = document.getElementById('pipePreset').value;
@@ -286,77 +470,183 @@ function applyPreset() {
         document.getElementById('diameter').value = presetValue;
         document.getElementById('diameterUnit').value = "inch";
     }
-    calculateFlow();
+    calculateAll();
 }
 
 function manualDiameterInput() {
     document.getElementById('pipePreset').value = "custom";
-    calculateFlow();
+    calculateAll();
 }
 
-function calculateFlow() {
+function calculateAll() {
+    // Get pipe diameter
     let diameter = parseFloat(document.getElementById('diameter').value);
     let dUnit = document.getElementById('diameterUnit').value;
-    let velocity = parseFloat(document.getElementById('velocity').value);
-    let vUnit = document.getElementById('velocityUnit').value;
+    
+    // Get velocity values (in m/s)
+    let velocityMin = parseFloat(document.getElementById('velocityMin').value);
+    let velocityNormal = parseFloat(document.getElementById('velocityNormal').value);
+    let velocityMax = parseFloat(document.getElementById('velocityMax').value);
+    
+    // Get environmental conditions
+    let pressureMin = parseFloat(document.getElementById('pressureMin').value);
+    let pressureNormal = parseFloat(document.getElementById('pressureNormal').value);
+    let pressureMax = parseFloat(document.getElementById('pressureMax').value);
+    
+    let tempMin = parseFloat(document.getElementById('tempMin').value);
+    let tempNormal = parseFloat(document.getElementById('tempNormal').value);
+    let tempMax = parseFloat(document.getElementById('tempMax').value);
 
-    if (isNaN(diameter) || diameter <= 0 || isNaN(velocity) || velocity <= 0) {
-        document.getElementById('resArea').innerText = "-";
-        document.getElementById('resLPM').innerText = "-";
-        document.getElementById('resM3H').innerText = "-";
-        document.getElementById('resGPM').innerText = "-";
-        currentOutputs = { dStr: '', vStr: '', gpm: '-', m3h: '-' };
+    // Validation
+    if (isNaN(diameter) || diameter <= 0 || 
+        isNaN(velocityNormal) || velocityNormal <= 0) {
+        clearResults();
         return;
     }
 
+    // Convert diameter to metres
     let dInMetres = diameter;
     if (dUnit === "mm") dInMetres = diameter / 1000;
     if (dUnit === "inch") dInMetres = diameter * 0.0254;
 
-    let vInMetersPerSec = velocity;
-    if (vUnit === "ft/s") vInMetersPerSec = velocity * 0.3048;
-
+    // Calculate pipe cross-sectional area
     let radius = dInMetres / 2;
     let areaM2 = Math.PI * Math.pow(radius, 2);
-    let qM3PerSecond = vInMetersPerSec * areaM2;
 
-    let lpm = qM3PerSecond * 60000;
-    let m3h = qM3PerSecond * 3600;
-    let gpm = qM3PerSecond * 15850.3231;
+    // Calculate flow rates at different velocities
+    let qMinM3PerSecond = velocityMin * areaM2;
+    let qNormalM3PerSecond = velocityNormal * areaM2;
+    let qMaxM3PerSecond = velocityMax * areaM2;
 
+    // Convert to different units
+    let minLPM = qMinM3PerSecond * 60000;
+    let normalLPM = qNormalM3PerSecond * 60000;
+    let maxLPM = qMaxM3PerSecond * 60000;
+
+    let normalM3H = qNormalM3PerSecond * 3600;
+    let normalGPM = qNormalM3PerSecond * 15850.3231;
+
+    let flowRange = maxLPM - minLPM;
+
+    // Calculate velocity change
+    let velocityChange = velocityMax - velocityMin;
+
+    // Calculate accuracy and environmental effects
+    let accuracy = calculateAccuracy(
+        pressureMin, pressureNormal, pressureMax,
+        tempMin, tempNormal, tempMax
+    );
+
+    let temperatureEffect = calculateTemperatureEffect(tempMin, tempNormal, tempMax);
+    let pressureEffect = calculatePressureEffect(pressureMin, pressureNormal, pressureMax);
+
+    // Determine accuracy class
+    let accuracyClass = getAccuracyClass(accuracy);
+
+    // Update UI
     document.getElementById('resArea').innerText = areaM2.toFixed(5) + " m²";
-    document.getElementById('resLPM').innerText = lpm.toFixed(2) + " L/min";
-    document.getElementById('resM3H').innerText = m3h.toFixed(2) + " m³/h";
-    document.getElementById('resGPM').innerText = gpm.toFixed(2) + " GPM";
+    document.getElementById('resLPM').innerText = normalLPM.toFixed(2) + " L/min";
+    document.getElementById('resM3H').innerText = normalM3H.toFixed(2) + " m³/h";
+    document.getElementById('resGPM').innerText = normalGPM.toFixed(2) + " GPM";
+    
+    document.getElementById('resMinFlow').innerText = minLPM.toFixed(2) + " L/min";
+    document.getElementById('resMaxFlow').innerText = maxLPM.toFixed(2) + " L/min";
+    document.getElementById('resFlowRange').innerText = flowRange.toFixed(2) + " L/min";
+    document.getElementById('resVelChange').innerText = velocityChange.toFixed(3) + " m/s";
 
-    // Track active string figures securely for potential storage logging commits
+    // Update accuracy displays
+    let accuracyColor = accuracy <= 1.5 ? 'accuracy-high' : accuracy <= 3.0 ? 'accuracy-med' : 'accuracy-low';
+    document.getElementById('resAccuracy').innerHTML = `<span class="${accuracyColor}">${accuracy.toFixed(2)}%</span>`;
+    document.getElementById('resAccuracyClass').innerText = accuracyClass;
+    document.getElementById('resTempEffect').innerText = temperatureEffect.toFixed(3) + "%/°C";
+    document.getElementById('resPressureEffect').innerText = pressureEffect.toFixed(3) + "%/bar";
+
+    // Store for history
     currentOutputs = {
-        dStr: diameter + " " + dUnit,
-        vStr: velocity + " " + vUnit,
-        gpm: gpm.toFixed(1) + " GPM",
-        m3h: m3h.toFixed(1) + " m³/h"
+        diameter: diameter + " " + dUnit,
+        velocityNormal: velocityNormal.toFixed(2) + " m/s",
+        flowGPM: normalGPM.toFixed(1) + " GPM",
+        accuracy: accuracy.toFixed(2) + "%",
+        velChange: velocityChange.toFixed(3) + " m/s"
     };
 }
 
-// Write logged row inside the device's persistent browser storage sandbox
-function saveToHistory() {
-    if (currentOutputs.gpm === '-') return; // Block blank entry submissions
+function calculateAccuracy(pMin, pNormal, pMax, tMin, tNormal, tMax) {
+    // Base accuracy for mag flow meters: typically ±0.5% to ±1%
+    let baseAccuracy = 0.5;
+    
+    // Pressure effect: ±0.2% per 10 bar deviation
+    let pressureDeviation = Math.max(
+        Math.abs(pMin - pNormal),
+        Math.abs(pMax - pNormal)
+    );
+    let pressureError = (pressureDeviation / 10) * 0.2;
+    
+    // Temperature effect: ±0.1% per °C deviation
+    let tempDeviation = Math.max(
+        Math.abs(tMin - tNormal),
+        Math.abs(tMax - tNormal)
+    );
+    let tempError = tempDeviation * 0.1;
+    
+    // Combined accuracy (RSS - Root Sum of Squares method)
+    let totalAccuracy = Math.sqrt(
+        Math.pow(baseAccuracy, 2) +
+        Math.pow(pressureError, 2) +
+        Math.pow(tempError, 2)
+    );
+    
+    return totalAccuracy;
+}
 
-    // Pull down historical arrays from storage context, or build clean starting array
+function calculateTemperatureEffect(tMin, tNormal, tMax) {
+    // Temperature coefficient for mag flow meters: typically ±0.05% to ±0.15% per °C
+    let tempRange = tMax - tMin;
+    return (tempRange / (tMax - tMin || 1)) * 0.1; // 0.1% per °C nominal
+}
+
+function calculatePressureEffect(pMin, pNormal, pMax) {
+    // Pressure coefficient: typically ±0.1% to ±0.2% per bar
+    let pressureRange = pMax - pMin;
+    return (pressureRange / (pMax - pMin || 1)) * 0.15; // 0.15% per bar nominal
+}
+
+function getAccuracyClass(accuracy) {
+    if (accuracy <= 0.5) return "Class 0.5 (Excellent)";
+    if (accuracy <= 1.0) return "Class 1.0 (Very Good)";
+    if (accuracy <= 1.5) return "Class 1.5 (Good)";
+    if (accuracy <= 2.5) return "Class 2.5 (Fair)";
+    if (accuracy <= 4.0) return "Class 4.0 (Acceptable)";
+    return "Class 5.0 (Poor)";
+}
+
+function clearResults() {
+    document.getElementById('resArea').innerText = "-";
+    document.getElementById('resLPM').innerText = "-";
+    document.getElementById('resM3H').innerText = "-";
+    document.getElementById('resGPM').innerText = "-";
+    document.getElementById('resMinFlow').innerText = "-";
+    document.getElementById('resMaxFlow').innerText = "-";
+    document.getElementById('resFlowRange').innerText = "-";
+    document.getElementById('resVelChange').innerText = "-";
+    document.getElementById('resAccuracy').innerText = "-";
+    document.getElementById('resAccuracyClass').innerText = "-";
+    document.getElementById('resTempEffect').innerText = "-";
+    document.getElementById('resPressureEffect').innerText = "-";
+}
+
+// Save to offline history
+function saveToHistory() {
+    if (currentOutputs.flowGPM === '' || currentOutputs.flowGPM === '-') return;
+
     let history = JSON.parse(localStorage.getItem('magFlowHistory')) || [];
-    
-    // Add current computation snapshot to the log
     history.push(currentOutputs);
-    
-    // Write array directly to local storage cache
     localStorage.setItem('magFlowHistory', JSON.stringify(history));
-    
-    // Re-render UI list layout updates matching updated records
     renderHistory();
 }
 
 function clearHistory() {
-    if(confirm("Are you sure you want to clear your local offline log history?")) {
+    if(confirm("Clear all calculation history?")) {
         localStorage.removeItem('magFlowHistory');
         renderHistory();
     }
@@ -368,26 +658,29 @@ function renderHistory() {
     tbody.innerHTML = '';
 
     if (history.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="no-data">No logged calculations saved locally.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="no-data">No calculations saved</td></tr>`;
         return;
     }
 
-    // Build log layout loop structurally backward to display freshest items first
+    // Display newest first
     for (let i = history.length - 1; i >= 0; i--) {
         let row = document.createElement('tr');
         row.innerHTML = `
-            <td>${history[i].dStr}</td>
-            <td>${history[i].vStr}</td>
-            <td>${history[i].gpm}</td>
-            <td>${history[i].m3h}</td>
+            <td>${history[i].diameter}</td>
+            <td>${history[i].velocityNormal}</td>
+            <td>${history[i].flowGPM}</td>
+            <td>${history[i].accuracy}</td>
+            <td>${history[i].velChange}</td>
         `;
         tbody.appendChild(row);
     }
 }
 
-// Auto-run layout configurations immediately when processing core loads initially
-applyPreset();
-renderHistory();
+// Initialize on load
+window.addEventListener('load', function() {
+    calculateAll();
+    renderHistory();
+});
 </script>
 
 </body>
