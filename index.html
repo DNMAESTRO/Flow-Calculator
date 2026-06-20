@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Mag Flow Meter Calculator</title>
+    <title>MAESTRO ASIA LDG Series Flow Meter Calculator</title>
     <style>
         :root {
             --primary: #0056b3;
@@ -247,7 +247,10 @@
 <body>
 
 <div class="calculator-card">
-    <h2>⚙️ Advanced Mag Flow Meter Calculator</h2>
+    <h2>⚙️ MAESTRO ASIA LDG Series - Electromagnetic Flow Meter Calculator</h2>
+    <p style="text-align: center; color: #0056b3; font-size: 14px; margin: -10px 0 20px 0; font-weight: 500;">
+        ✓ MAESTRO ASIA PTE LTD - Professional Flowmeter Selection Tool
+    </p>
     
     <!-- PIPE CONFIGURATION SECTION -->
     <h3>📏 Pipe Configuration</h3>
@@ -292,43 +295,40 @@
     </div>
 
     <!-- FLOW METER SPECIFICATIONS SECTION -->
-    <h3>📊 Flow Meter Specifications</h3>
+    <h3>📊 MAESTRO ASIA LDG Series Specifications</h3>
 
     <div class="parameter-section">
         <label>Meter Manufacturer</label>
-        <span class="label-small">Select the flow meter manufacturer</span>
+        <span class="label-small">MAESTRO ASIA PTE LTD</span>
+        <div style="padding: 12px; background: #e3f2fd; border-radius: 6px; margin-top: 8px; color: #0056b3; font-weight: 500;">
+            ✓ MAESTRO ASIA LDG Series Electromagnetic Flowmeter
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>Meter Model Type</label>
+        <span class="label-small">Select LDG series model configuration</span>
         <div class="input-group">
-            <select id="meterManufacturer" onchange="calculateAll()">
-                <option value="generic" selected>Generic Mag Meter</option>
-                <option value="siemens">Siemens</option>
-                <option value="endress">Endress+Hauser</option>
-                <option value="emerson">Emerson</option>
-                <option value="yokogawa">Yokogawa</option>
-                <option value="krohne">KROHNE</option>
-                <option value="custom">Custom/Other</option>
+            <select id="meterModel" onchange="updateMeterSpecifications()">
+                <option value="ldg-b" selected>LDG-B Type (Standard Compact)</option>
+                <option value="ldg-y">LDG-Y Type (With Display)</option>
+                <option value="ldg-f">LDG-F Type (Compact with Local Display)</option>
+                <option value="ldg-a">LDG-A Type (Remote Type)</option>
             </select>
         </div>
     </div>
 
     <div class="parameter-section">
-        <label>Meter Model/Specification</label>
-        <span class="label-small">Enter meter model or leave as custom</span>
-        <div class="input-group">
-            <input type="text" id="meterModel" placeholder="e.g., MAG 3100 or Custom Model" oninput="calculateAll()">
-        </div>
-    </div>
-
-    <div class="parameter-section">
-        <label>Meter Given Flow Rate Range</label>
-        <span class="label-small">Manufacturer's specified min and max flow</span>
+        <label>Meter Flow Rate Range (MAESTRO Spec)</label>
+        <span class="label-small">Velocity range: 0.3-10 m/s | Adjust based on pipe diameter</span>
         <div class="parameter-grid">
             <div class="param-box">
                 <label>Min Flow</label>
-                <input type="number" id="meterFlowMin" value="5" step="0.1" oninput="calculateAll()">
+                <input type="number" id="meterFlowMin" value="3" step="0.1" oninput="calculateAll()">
             </div>
             <div class="param-box">
                 <label>Max Flow</label>
-                <input type="number" id="meterFlowMax" value="250" step="0.1" oninput="calculateAll()">
+                <input type="number" id="meterFlowMax" value="300" step="0.1" oninput="calculateAll()">
             </div>
             <div class="param-box">
                 <label>Unit</label>
@@ -342,10 +342,21 @@
     </div>
 
     <div class="parameter-section">
-        <label>Meter Repeatability (%)</label>
-        <span class="label-small">Measurement repeatability/reproducibility</span>
-        <div class="input-group">
-            <input type="number" id="meterRepeatability" value="0.2" step="0.1" oninput="calculateAll()">
+        <label>Meter Specifications (MAESTRO ASIA LDG)</label>
+        <span class="label-small">Standard MAESTRO specifications</span>
+        <div class="parameter-grid">
+            <div class="param-box">
+                <label>Accuracy (%)</label>
+                <input type="number" id="meterAccuracySpec" value="0.5" step="0.1" disabled style="background: #f0f0f0;">
+            </div>
+            <div class="param-box">
+                <label>Repeatability (%)</label>
+                <input type="number" id="meterRepeatability" value="0.1" step="0.1" disabled style="background: #f0f0f0;">
+            </div>
+            <div class="param-box">
+                <label>Velocity Range</label>
+                <input type="text" value="0.3-10 m/s" disabled style="background: #f0f0f0;">
+            </div>
         </div>
     </div>
 
@@ -515,12 +526,12 @@
         </div>
     </div>
 
-    <!-- METER ACCURACY -->
+    <!-- METER ACCURACY (Fixed MAESTRO) -->
     <div class="parameter-section">
-        <label>Meter Accuracy (%)</label>
-        <span class="label-small">Instrument specification accuracy</span>
+        <label>MAESTRO ASIA LDG Meter Accuracy</label>
+        <span class="label-small">MAESTRO standard accuracy specification: ±0.5% of rate</span>
         <div class="input-group">
-            <input type="number" id="meterAccuracy" value="0.5" step="0.1" oninput="calculateAll()">
+            <input type="number" id="meterAccuracy" value="0.5" step="0.1" disabled style="background: #f0f0f0; color: #0056b3; font-weight: bold;">
         </div>
     </div>
 
@@ -657,20 +668,20 @@
     </div>
 </div>
 
-<!-- Offline Log Storage Card -->
+<!-- MAESTRO ASIA LDG Series - Calculation History -->
 <div class="history-card">
     <div class="history-header">
-        <h3>📋 Calculation History</h3>
+        <h3>📋 MAESTRO ASIA - Calculation History</h3>
         <button class="btn-clear" onclick="clearHistory()">Clear All</button>
     </div>
     <div class="table-wrapper">
         <table>
             <thead>
                 <tr>
-                    <th>Diameter</th>
+                    <th>Pipe Diameter</th>
                     <th>Flow (L/min)</th>
                     <th>Velocity (m/s)</th>
-                    <th>Meter Acc. (%)</th>
+                    <th>MAESTRO Accuracy (%)</th>
                     <th>Compliant</th>
                 </tr>
             </thead>
@@ -733,6 +744,27 @@ function updateFluidProperties() {
     // Update conductivity if selected from list
     if (fluidDatabase[fluidType]) {
         document.getElementById('fluidConductivity').value = fluidDatabase[fluidType].conductivity;
+    }
+    
+    calculateAll();
+}
+
+function updateMeterSpecifications() {
+    // MAESTRO ASIA LDG series specifications are standardized
+    // Update display to show selected model info
+    let model = document.getElementById('meterModel').value;
+    let modelInfo = {
+        'ldg-b': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 },
+        'ldg-y': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 },
+        'ldg-f': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 },
+        'ldg-a': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 }
+    };
+    
+    if (modelInfo[model]) {
+        document.getElementById('meterAccuracy').value = modelInfo[model].accuracy;
+        document.getElementById('meterRepeatability').value = modelInfo[model].repeatability;
+        document.getElementById('meterFlowMin').value = modelInfo[model].minFlow;
+        document.getElementById('meterFlowMax').value = modelInfo[model].maxFlow;
     }
     
     calculateAll();
@@ -981,21 +1013,22 @@ function checkFluidCompatibility(fluidType, conductivity, concentration) {
     let compatible = true;
     let status = "";
     
+    // MAESTRO ASIA LDG Series Requirements: Minimum conductivity 5 µS/cm
     if (fluidType === 'oil') {
         compatible = false;
-        status = "✗ Non-conductive oil - NOT suitable for magnetic flow meter";
+        status = "✗ Non-conductive oil - NOT suitable for MAESTRO electromagnetic flow meter";
     } else if (fluidType === 'slurry' && concentration > 30) {
         compatible = false;
-        status = "✗ High slurry concentration - May cause electrode coating";
+        status = "✗ High slurry concentration - May cause electrode coating (MAESTRO max 30%)";
     } else if (conductivity < 5 && fluidType !== 'oil') {
         compatible = false;
-        status = "✗ Too low conductivity - Meter cannot function properly";
+        status = "✗ Conductivity too low - MAESTRO requires minimum 5 µS/cm";
     } else if (fluidType === 'chemical' && concentration > 80) {
-        status = "⚠ Very high concentration - Verify material compatibility";
+        status = "⚠ High concentration - Verify with MAESTRO technical support for compatibility";
         compatible = true;
     } else {
         compatible = true;
-        status = "✓ Suitable for magnetic flow meter";
+        status = "✓ Suitable for MAESTRO ASIA LDG Series";
     }
     
     return { ok: compatible, status: status };
@@ -1099,7 +1132,7 @@ function generatePDF() {
     const timestamp = new Date().toLocaleString();
     
     let html = `
-    <h1 style="text-align: center; color: #0056b3; margin-bottom: 5px;">Mag Flow Meter Calculator Report</h1>
+    <h1 style="text-align: center; color: #0056b3; margin-bottom: 5px;">MAESTRO ASIA LDG Series Flowmeter Analysis Report</h1>
     <p style="text-align: center; color: #666; font-size: 12px; margin-bottom: 20px;">Generated: ${timestamp}</p>
     
     <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Pipe Configuration</h2>
@@ -1110,23 +1143,59 @@ function generatePDF() {
         </tr>
     </table>
     
-    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Flow Meter Specifications</h2>
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">MAESTRO ASIA Meter Specifications</h2>
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
         <tr>
             <td style="padding: 8px; border: 1px solid #ddd;"><strong>Manufacturer:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterManufacturer').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">MAESTRO ASIA PTE LTD</td>
         </tr>
         <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Model:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterModel').value || 'Not specified'}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Series:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">LDG (Electromagnetic Flowmeter)</td>
         </tr>
         <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Given Flow Range:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterFlowMin').value} - ${document.getElementById('meterFlowMax').value} ${document.getElementById('meterFlowUnit').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Model Type:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterModel').value.toUpperCase()}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Accuracy Spec:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">±${document.getElementById('meterAccuracy').value}% of rate</td>
         </tr>
         <tr>
             <td style="padding: 8px; border: 1px solid #ddd;"><strong>Repeatability:</strong></td>
             <td style="padding: 8px; border: 1px solid #ddd;">±${document.getElementById('meterRepeatability').value}%</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Velocity Range:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">0.3 - 10 m/s</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Operating Temperature:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">-20 to +60°C (Standard) / up to +90°C (with special liners)</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Minimum Conductivity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">5 µS/cm</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Electrode Material:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">SS316L / Tantalum / Hastelloy (selectable)</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Body Material:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">Stainless Steel</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Application Flow Range</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Min Flow (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterFlowMin').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Max Flow (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterFlowMax').value}</td>
         </tr>
     </table>
     
@@ -1269,7 +1338,7 @@ function generatePDF() {
     </table>
     
     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 11px;">
-        <p>This comprehensive report was generated by the Advanced Mag Flow Meter Calculator</p>
+        <p>This analysis report was generated by the MAESTRO ASIA LDG Series Flowmeter Calculator<br/>For technical support, contact MAESTRO ASIA PTE LTD</p>
     </div>
     `;
     
