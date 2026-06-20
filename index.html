@@ -333,23 +333,52 @@
         </div>
     </div>
 
-    <!-- FLUID VELOCITY -->
+    <!-- FLOW RATE INPUT -->
     <div class="parameter-section">
-        <label>Fluid Velocity (m/s)</label>
-        <span class="label-small">Set minimum, normal, and maximum flow velocity</span>
+        <label>Fluid Flow Rate</label>
+        <span class="label-small">Set minimum, normal, and maximum flow</span>
         <div class="parameter-grid">
             <div class="param-box">
-                <label>Min (m/s)</label>
-                <input type="number" id="velocityMin" value="0.5" step="0.01" oninput="calculateAll()">
+                <label>Min Flow</label>
+                <input type="number" id="flowMin" value="10" step="0.1" oninput="calculateAll()">
             </div>
             <div class="param-box">
-                <label>Normal (m/s)</label>
-                <input type="number" id="velocityNormal" value="2.5" step="0.01" oninput="calculateAll()">
+                <label>Normal Flow</label>
+                <input type="number" id="flowNormal" value="100" step="0.1" oninput="calculateAll()">
             </div>
             <div class="param-box">
-                <label>Max (m/s)</label>
-                <input type="number" id="velocityMax" value="5.0" step="0.01" oninput="calculateAll()">
+                <label>Max Flow</label>
+                <input type="number" id="flowMax" value="200" step="0.1" oninput="calculateAll()">
             </div>
+        </div>
+        <div class="input-group" style="margin-top: 10px;">
+            <label for="flowUnit">Flow Unit</label>
+            <select id="flowUnit" onchange="calculateAll()">
+                <option value="lpm" selected>L/min</option>
+                <option value="m3h">m³/h</option>
+                <option value="gpm">GPM</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- ACCURACY REQUIREMENTS SECTION -->
+    <h3>🎯 Accuracy Requirements</h3>
+
+    <!-- REQUIRED ACCURACY SETPOINT -->
+    <div class="parameter-section">
+        <label>Required Accuracy Setpoint (%)</label>
+        <span class="label-small">Maximum allowable error for your application</span>
+        <div class="input-group">
+            <input type="number" id="requiredAccuracy" value="2.0" step="0.1" oninput="calculateAll()">
+        </div>
+    </div>
+
+    <!-- METER ACCURACY -->
+    <div class="parameter-section">
+        <label>Meter Accuracy (%)</label>
+        <span class="label-small">Instrument specification accuracy</span>
+        <div class="input-group">
+            <input type="number" id="meterAccuracy" value="0.5" step="0.1" oninput="calculateAll()">
         </div>
     </div>
 
@@ -360,10 +389,14 @@
         <div class="results-grid">
             <!-- Left Column: Flow Calculations -->
             <div class="result-section">
-                <h4>Flow Rates (Normal)</h4>
+                <h4>Velocity from Flow (Normal)</h4>
                 <div class="result-item">
                     <span>Area (A):</span>
                     <span class="value" id="resArea">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Velocity (m/s):</span>
+                    <span class="value" id="resVelocity">-</span>
                 </div>
                 <div class="result-item">
                     <span>Flow (L/min):</span>
@@ -373,52 +406,49 @@
                     <span>Flow (m³/h):</span>
                     <span class="value" id="resM3H">-</span>
                 </div>
-                <div class="result-item">
-                    <span>Flow (GPM):</span>
-                    <span class="value" id="resGPM">-</span>
-                </div>
             </div>
 
-            <!-- Right Column: Range Analysis -->
+            <!-- Right Column: Velocity Range Analysis -->
             <div class="result-section">
-                <h4>Flow Range Analysis</h4>
+                <h4>Velocity Range Analysis</h4>
                 <div class="result-item">
-                    <span>Min Flow (L/min):</span>
-                    <span class="value" id="resMinFlow">-</span>
+                    <span>Min Velocity (m/s):</span>
+                    <span class="value" id="resMinVelocity">-</span>
                 </div>
                 <div class="result-item">
-                    <span>Max Flow (L/min):</span>
-                    <span class="value" id="resMaxFlow">-</span>
+                    <span>Max Velocity (m/s):</span>
+                    <span class="value" id="resMaxVelocity">-</span>
+                </div>
+                <div class="result-item">
+                    <span>Velocity Range (m/s):</span>
+                    <span class="value" id="resVelocityRange">-</span>
                 </div>
                 <div class="result-item">
                     <span>Flow Range (L/min):</span>
                     <span class="value" id="resFlowRange">-</span>
                 </div>
-                <div class="result-item">
-                    <span>Velocity Change:</span>
-                    <span class="value" id="resVelChange">-</span>
-                </div>
             </div>
         </div>
 
-        <!-- Accuracy Section -->
+        <!-- Accuracy Comparison Section -->
         <div style="background: #fff3cd; border-left: 4px solid var(--warning); padding: 12px; border-radius: 4px; margin-top: 15px;">
-            <h4 style="margin: 0 0 10px 0; color: #856404;">Accuracy Analysis</h4>
+            <h4 style="margin: 0 0 10px 0; color: #856404;">📋 Accuracy Compliance Check</h4>
             <div class="result-item">
-                <span>System Accuracy:</span>
-                <span class="value" id="resAccuracy">-</span>
+                <span>Required Accuracy:</span>
+                <span class="value" id="resRequiredAccuracy">-</span>
             </div>
             <div class="result-item">
-                <span>Accuracy Class:</span>
-                <span class="value" id="resAccuracyClass">-</span>
+                <span>Meter Accuracy:</span>
+                <span class="value" id="resMeterAccuracy">-</span>
             </div>
             <div class="result-item">
-                <span>Temperature Effect:</span>
-                <span class="value" id="resTempEffect">-</span>
+                <span>Combined System Accuracy:</span>
+                <span class="value" id="resSystemAccuracy">-</span>
             </div>
-            <div class="result-item">
-                <span>Pressure Effect:</span>
-                <span class="value" id="resPressureEffect">-</span>
+            <div class="result-item" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #ddd;">
+                <span style="font-weight: bold; font-size: 16px;">Compliance Status:</span>
+                <span class="value" id="resComplianceStatus" style="font-size: 16px;">-</span>
+            </div>
             </div>
         </div>
     </div>
@@ -441,10 +471,10 @@
             <thead>
                 <tr>
                     <th>Diameter</th>
+                    <th>Flow (L/min)</th>
                     <th>Velocity (m/s)</th>
-                    <th>Flow (GPM)</th>
-                    <th>Accuracy</th>
-                    <th>Vel. Change</th>
+                    <th>Meter Acc. (%)</th>
+                    <th>Compliant</th>
                 </tr>
             </thead>
             <tbody id="historyTableBody">
@@ -458,10 +488,10 @@
 // Global state for current computations
 let currentOutputs = {
     diameter: '',
+    flowNormal: '',
     velocityNormal: '',
-    flowGPM: '',
-    accuracy: '',
-    velChange: ''
+    meterAccuracy: '',
+    compliant: ''
 };
 
 function applyPreset() {
@@ -478,15 +508,44 @@ function manualDiameterInput() {
     calculateAll();
 }
 
+// Convert flow to L/min
+function convertFlowToLPM(flow, unit) {
+    switch(unit) {
+        case 'lpm':
+            return flow;
+        case 'm3h':
+            return flow * (1000 / 60);
+        case 'gpm':
+            return flow * 3.78541;
+        default:
+            return flow;
+    }
+}
+
+// Convert flow from L/min to other units
+function convertFlowFromLPM(lpm, unit) {
+    switch(unit) {
+        case 'lpm':
+            return lpm;
+        case 'm3h':
+            return lpm * (60 / 1000);
+        case 'gpm':
+            return lpm / 3.78541;
+        default:
+            return lpm;
+    }
+}
+
 function calculateAll() {
     // Get pipe diameter
     let diameter = parseFloat(document.getElementById('diameter').value);
     let dUnit = document.getElementById('diameterUnit').value;
     
-    // Get velocity values (in m/s)
-    let velocityMin = parseFloat(document.getElementById('velocityMin').value);
-    let velocityNormal = parseFloat(document.getElementById('velocityNormal').value);
-    let velocityMax = parseFloat(document.getElementById('velocityMax').value);
+    // Get flow values in their specified unit
+    let flowMin = parseFloat(document.getElementById('flowMin').value);
+    let flowNormal = parseFloat(document.getElementById('flowNormal').value);
+    let flowMax = parseFloat(document.getElementById('flowMax').value);
+    let flowUnit = document.getElementById('flowUnit').value;
     
     // Get environmental conditions
     let pressureMin = parseFloat(document.getElementById('pressureMin').value);
@@ -496,10 +555,14 @@ function calculateAll() {
     let tempMin = parseFloat(document.getElementById('tempMin').value);
     let tempNormal = parseFloat(document.getElementById('tempNormal').value);
     let tempMax = parseFloat(document.getElementById('tempMax').value);
+    
+    // Get accuracy requirements
+    let requiredAccuracy = parseFloat(document.getElementById('requiredAccuracy').value);
+    let meterAccuracy = parseFloat(document.getElementById('meterAccuracy').value);
 
     // Validation
     if (isNaN(diameter) || diameter <= 0 || 
-        isNaN(velocityNormal) || velocityNormal <= 0) {
+        isNaN(flowNormal) || flowNormal <= 0) {
         clearResults();
         return;
     }
@@ -513,67 +576,74 @@ function calculateAll() {
     let radius = dInMetres / 2;
     let areaM2 = Math.PI * Math.pow(radius, 2);
 
-    // Calculate flow rates at different velocities
-    let qMinM3PerSecond = velocityMin * areaM2;
-    let qNormalM3PerSecond = velocityNormal * areaM2;
-    let qMaxM3PerSecond = velocityMax * areaM2;
+    // Convert flows to L/min
+    let flowMinLPM = convertFlowToLPM(flowMin, flowUnit);
+    let flowNormalLPM = convertFlowToLPM(flowNormal, flowUnit);
+    let flowMaxLPM = convertFlowToLPM(flowMax, flowUnit);
 
-    // Convert to different units
-    let minLPM = qMinM3PerSecond * 60000;
-    let normalLPM = qNormalM3PerSecond * 60000;
-    let maxLPM = qMaxM3PerSecond * 60000;
+    // Calculate velocities from flow: v = Q / A
+    // Flow in m³/s = L/min / 60000
+    let flowMinM3S = flowMinLPM / 60000;
+    let flowNormalM3S = flowNormalLPM / 60000;
+    let flowMaxM3S = flowMaxLPM / 60000;
 
-    let normalM3H = qNormalM3PerSecond * 3600;
-    let normalGPM = qNormalM3PerSecond * 15850.3231;
+    let velocityMin = flowMinM3S / areaM2;
+    let velocityNormal = flowNormalM3S / areaM2;
+    let velocityMax = flowMaxM3S / areaM2;
 
-    let flowRange = maxLPM - minLPM;
+    // Calculate other flow formats for normal flow
+    let normalM3H = flowNormalLPM * (60 / 1000);
+    let normalGPM = flowNormalLPM / 3.78541;
 
-    // Calculate velocity change
-    let velocityChange = velocityMax - velocityMin;
+    let velocityRange = velocityMax - velocityMin;
+    let flowRange = flowMaxLPM - flowMinLPM;
 
-    // Calculate accuracy and environmental effects
-    let accuracy = calculateAccuracy(
+    // Calculate combined system accuracy
+    let systemAccuracy = calculateSystemAccuracy(
+        meterAccuracy,
         pressureMin, pressureNormal, pressureMax,
         tempMin, tempNormal, tempMax
     );
 
-    let temperatureEffect = calculateTemperatureEffect(tempMin, tempNormal, tempMax);
-    let pressureEffect = calculatePressureEffect(pressureMin, pressureNormal, pressureMax);
-
-    // Determine accuracy class
-    let accuracyClass = getAccuracyClass(accuracy);
+    // Determine compliance
+    let compliant = systemAccuracy <= requiredAccuracy;
+    let complianceStatus = compliant ? 
+        `✓ COMPLIANT (${systemAccuracy.toFixed(2)}% ≤ ${requiredAccuracy.toFixed(2)}%)` :
+        `✗ NON-COMPLIANT (${systemAccuracy.toFixed(2)}% > ${requiredAccuracy.toFixed(2)}%)`;
+    
+    let complianceColor = compliant ? 'accuracy-high' : 'accuracy-low';
 
     // Update UI
     document.getElementById('resArea').innerText = areaM2.toFixed(5) + " m²";
-    document.getElementById('resLPM').innerText = normalLPM.toFixed(2) + " L/min";
+    document.getElementById('resVelocity').innerText = velocityNormal.toFixed(3) + " m/s";
+    document.getElementById('resLPM').innerText = flowNormalLPM.toFixed(2) + " L/min";
     document.getElementById('resM3H').innerText = normalM3H.toFixed(2) + " m³/h";
     document.getElementById('resGPM').innerText = normalGPM.toFixed(2) + " GPM";
     
-    document.getElementById('resMinFlow').innerText = minLPM.toFixed(2) + " L/min";
-    document.getElementById('resMaxFlow').innerText = maxLPM.toFixed(2) + " L/min";
+    document.getElementById('resMinVelocity').innerText = velocityMin.toFixed(3) + " m/s";
+    document.getElementById('resMaxVelocity').innerText = velocityMax.toFixed(3) + " m/s";
+    document.getElementById('resVelocityRange').innerText = velocityRange.toFixed(3) + " m/s";
     document.getElementById('resFlowRange').innerText = flowRange.toFixed(2) + " L/min";
-    document.getElementById('resVelChange').innerText = velocityChange.toFixed(3) + " m/s";
 
     // Update accuracy displays
-    let accuracyColor = accuracy <= 1.5 ? 'accuracy-high' : accuracy <= 3.0 ? 'accuracy-med' : 'accuracy-low';
-    document.getElementById('resAccuracy').innerHTML = `<span class="${accuracyColor}">${accuracy.toFixed(2)}%</span>`;
-    document.getElementById('resAccuracyClass').innerText = accuracyClass;
-    document.getElementById('resTempEffect').innerText = temperatureEffect.toFixed(3) + "%/°C";
-    document.getElementById('resPressureEffect').innerText = pressureEffect.toFixed(3) + "%/bar";
+    document.getElementById('resRequiredAccuracy').innerText = requiredAccuracy.toFixed(2) + "%";
+    document.getElementById('resMeterAccuracy').innerText = meterAccuracy.toFixed(2) + "%";
+    document.getElementById('resSystemAccuracy').innerHTML = `<span class="${compliant ? 'accuracy-high' : 'accuracy-low'}">${systemAccuracy.toFixed(2)}%</span>`;
+    document.getElementById('resComplianceStatus').innerHTML = `<span class="${complianceColor}">${complianceStatus}</span>`;
 
     // Store for history
     currentOutputs = {
         diameter: diameter + " " + dUnit,
-        velocityNormal: velocityNormal.toFixed(2) + " m/s",
-        flowGPM: normalGPM.toFixed(1) + " GPM",
-        accuracy: accuracy.toFixed(2) + "%",
-        velChange: velocityChange.toFixed(3) + " m/s"
+        flowNormal: flowNormalLPM.toFixed(1) + " L/min",
+        velocityNormal: velocityNormal.toFixed(3) + " m/s",
+        meterAccuracy: meterAccuracy.toFixed(2) + "%",
+        compliant: compliant ? "✓ YES" : "✗ NO"
     };
 }
 
-function calculateAccuracy(pMin, pNormal, pMax, tMin, tNormal, tMax) {
-    // Base accuracy for mag flow meters: typically ±0.5% to ±1%
-    let baseAccuracy = 0.5;
+function calculateSystemAccuracy(meterAcc, pMin, pNormal, pMax, tMin, tNormal, tMax) {
+    // Meter accuracy is the base
+    let baseAccuracy = meterAcc;
     
     // Pressure effect: ±0.2% per 10 bar deviation
     let pressureDeviation = Math.max(
@@ -599,45 +669,25 @@ function calculateAccuracy(pMin, pNormal, pMax, tMin, tNormal, tMax) {
     return totalAccuracy;
 }
 
-function calculateTemperatureEffect(tMin, tNormal, tMax) {
-    // Temperature coefficient for mag flow meters: typically ±0.05% to ±0.15% per °C
-    let tempRange = tMax - tMin;
-    return (tempRange / (tMax - tMin || 1)) * 0.1; // 0.1% per °C nominal
-}
-
-function calculatePressureEffect(pMin, pNormal, pMax) {
-    // Pressure coefficient: typically ±0.1% to ±0.2% per bar
-    let pressureRange = pMax - pMin;
-    return (pressureRange / (pMax - pMin || 1)) * 0.15; // 0.15% per bar nominal
-}
-
-function getAccuracyClass(accuracy) {
-    if (accuracy <= 0.5) return "Class 0.5 (Excellent)";
-    if (accuracy <= 1.0) return "Class 1.0 (Very Good)";
-    if (accuracy <= 1.5) return "Class 1.5 (Good)";
-    if (accuracy <= 2.5) return "Class 2.5 (Fair)";
-    if (accuracy <= 4.0) return "Class 4.0 (Acceptable)";
-    return "Class 5.0 (Poor)";
-}
-
 function clearResults() {
     document.getElementById('resArea').innerText = "-";
+    document.getElementById('resVelocity').innerText = "-";
     document.getElementById('resLPM').innerText = "-";
     document.getElementById('resM3H').innerText = "-";
     document.getElementById('resGPM').innerText = "-";
-    document.getElementById('resMinFlow').innerText = "-";
-    document.getElementById('resMaxFlow').innerText = "-";
+    document.getElementById('resMinVelocity').innerText = "-";
+    document.getElementById('resMaxVelocity').innerText = "-";
+    document.getElementById('resVelocityRange').innerText = "-";
     document.getElementById('resFlowRange').innerText = "-";
-    document.getElementById('resVelChange').innerText = "-";
-    document.getElementById('resAccuracy').innerText = "-";
-    document.getElementById('resAccuracyClass').innerText = "-";
-    document.getElementById('resTempEffect').innerText = "-";
-    document.getElementById('resPressureEffect').innerText = "-";
+    document.getElementById('resRequiredAccuracy').innerText = "-";
+    document.getElementById('resMeterAccuracy').innerText = "-";
+    document.getElementById('resSystemAccuracy').innerText = "-";
+    document.getElementById('resComplianceStatus').innerText = "-";
 }
 
 // Save to offline history
 function saveToHistory() {
-    if (currentOutputs.flowGPM === '' || currentOutputs.flowGPM === '-') return;
+    if (currentOutputs.flowNormal === '' || currentOutputs.flowNormal === '-') return;
 
     let history = JSON.parse(localStorage.getItem('magFlowHistory')) || [];
     history.push(currentOutputs);
@@ -667,10 +717,10 @@ function renderHistory() {
         let row = document.createElement('tr');
         row.innerHTML = `
             <td>${history[i].diameter}</td>
+            <td>${history[i].flowNormal}</td>
             <td>${history[i].velocityNormal}</td>
-            <td>${history[i].flowGPM}</td>
-            <td>${history[i].accuracy}</td>
-            <td>${history[i].velChange}</td>
+            <td>${history[i].meterAccuracy}</td>
+            <td>${history[i].compliant}</td>
         `;
         tbody.appendChild(row);
     }
