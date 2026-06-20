@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mag Flow Meter Calculator</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --success: #28a745;
+            --danger: #dc3545;
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #333333;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .calculator-card {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+        h2, h3 {
+            margin-top: 0;
+            color: var(--primary);
+            text-align: center;
+        }
+        h2 {
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 12px;
+        }
+        .input-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #fff;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .row .input-group {
+            flex: 1;
+        }
+        .results-box {
+            background: #eef5fc;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+        .value {
+            font-weight: bold;
+            color: #111;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: opacity 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-save {
+            background-color: var(--success);
+            color: white;
+        }
+        .btn-clear {
+            background-color: var(--danger);
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+            margin: 0;
+        }
+        .divider {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #888;
+            font-weight: bold;
+        }
+        /* Log Styling */
+        .history-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 8px;
+        }
+        .history-header h3 {
+            margin: 0;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #555;
+        }
+        .no-data {
+            text-align: center;
+            color: #888;
+            padding: 15px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-card">
+    <h2>Mag Meter Calculator</h2>
+    
+    <!-- Schedule 40 Presets -->
+    <div class="input-group">
+        <label for="pipePreset">Select Schedule 40 Pipe Size</label>
+        <select id="pipePreset" onchange="applyPreset()">
+            <option value="custom">-- Use Custom Dimensions Below --</option>
+            <option value="0.622">1/2" (ID: 0.622 in)</option>
+            <option value="0.824">3/4" (ID: 0.824 in)</option>
+            <option value="1.049" selected>1" (ID: 1.049 in)</option>
+            <option value="1.380">1-1/4" (ID: 1.380 in)</option>
+            <option value="1.610">1-1/2" (ID: 1.610 in)</option>
+            <option value="2.067">2" (ID: 2.067 in)</option>
+            <option value="2.469">2-1/2" (ID: 2.469 in)</option>
+            <option value="3.068">3" (ID: 3.068 in)</option>
+            <option value="4.026">4" (ID: 4.026 in)</option>
+            <option value="6.065">6" (ID: 6.065 in)</option>
+            <option value="7.981">8" (ID: 7.981 in)</option>
+            <option value="10.020">10" (ID: 10.020 in)</option>
+            <option value="11.938">12" (ID: 11.938 in)</option>
+        </select>
+    </div>
+
+    <div class="divider">OR EDIT DIMENSIONS MANUALLY</div>
+
+    <!-- Pipe Diameter Manual Inputs -->
+    <div class="row">
+        <div class="input-group">
+            <label for="diameter">Pipe Diameter (D)</label>
+            <input type="number" id="diameter" value="1.049" step="any" oninput="manualDiameterInput()">
+        </div>
+        <div class="input-group">
+            <label for="diameterUnit">Unit</label>
+            <select id="diameterUnit" onchange="manualDiameterInput()">
+                <option value="inch" selected>Inches</option>
+                <option value="mm">mm</option>
+                <option value="m">Metres</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Fluid Velocity Inputs -->
+    <div class="row">
+        <div class="input-group">
+            <label for="velocity">Fluid Velocity (V)</label>
+            <input type="number" id="velocity" value="2.5" step="any" oninput="calculateFlow()">
+        </div>
+        <div class="input-group">
+            <label for="velocityUnit">Unit</label>
+            <select id="velocityUnit" onchange="calculateFlow()">
+                <option value="m/s" selected>m/s</option>
+                <option value="ft/s">ft/s</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Output Calculations Block -->
+    <div class="results-box">
+        <div class="result-item">
+            <span>Area (A):</span>
+            <span class="value" id="resArea">-</span>
+        </div>
+        <div class="result-item">
+            <span>Flow Rate (L/min):</span>
+            <span class="value" id="resLPM">-</span>
+        </div>
+        <div class="result-item">
+            <span>Flow Rate (m³/h):</span>
+            <span class="value" id="resM3H">-</span>
+        </div>
+        <div class="result-item">
+            <span>Flow Rate (GPM):</span>
+            <span class="value" id="resGPM">-</span>
+        </div>
+    </div>
+
+    <!-- Action Button to Save Log -->
+    <button class="btn btn-save" onclick="saveToHistory()">💾 Save Log Entry</button>
+</div>
+
+<!-- Offline Log Storage Card -->
+<div class="history-card">
+    <div class="history-header">
+        <h3>Calculation History Log</h3>
+        <button class="btn-clear" onclick="clearHistory()">Clear All</button>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Size</th>
+                    <th>Velocity</th>
+                    <th>Flow (GPM)</th>
+                    <th>Flow (m³/h)</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <!-- Data injected dynamically by script -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Keep global memory objects tracking current computations
+let currentOutputs = { dStr: '', vStr: '', gpm: '-', m3h: '-' };
+
+function applyPreset() {
+    let presetValue = document.getElementById('pipePreset').value;
+    if (presetValue !== "custom") {
+        document.getElementById('diameter').value = presetValue;
+        document.getElementById('diameterUnit').value = "inch";
+    }
+    calculateFlow();
+}
+
+function manualDiameterInput() {
+    document.getElementById('pipePreset').value = "custom";
+    calculateFlow();
+}
+
+function calculateFlow() {
+    let diameter = parseFloat(document.getElementById('diameter').value);
+    let dUnit = document.getElementById('diameterUnit').value;
+    let velocity = parseFloat(document.getElementById('velocity').value);
+    let vUnit = document.getElementById('velocityUnit').value;
+
+    if (isNaN(diameter) || diameter <= 0 || isNaN(velocity) || velocity <= 0) {
+        document.getElementById('resArea').innerText = "-";
+        document.getElementById('resLPM').innerText = "-";
+        document.getElementById('resM3H').innerText = "-";
+        document.getElementById('resGPM').innerText = "-";
+        currentOutputs = { dStr: '', vStr: '', gpm: '-', m3h: '-' };
+        return;
+    }
+
+    let dInMetres = diameter;
+    if (dUnit === "mm") dInMetres = diameter / 1000;
+    if (dUnit === "inch") dInMetres = diameter * 0.0254;
+
+    let vInMetersPerSec = velocity;
+    if (vUnit === "ft/s") vInMetersPerSec = velocity * 0.3048;
+
+    let radius = dInMetres / 2;
+    let areaM2 = Math.PI * Math.pow(radius, 2);
+    let qM3PerSecond = vInMetersPerSec * areaM2;
+
+    let lpm = qM3PerSecond * 60000;
+    let m3h = qM3PerSecond * 3600;
+    let gpm = qM3PerSecond * 15850.3231;
+
+    document.getElementById('resArea').innerText = areaM2.toFixed(5) + " m²";
+    document.getElementById('resLPM').innerText = lpm.toFixed(2) + " L/min";
+    document.getElementById('resM3H').innerText = m3h.toFixed(2) + " m³/h";
+    document.getElementById('resGPM').innerText = gpm.toFixed(2) + " GPM";
+
+    // Track active string figures securely for potential storage logging commits
+    currentOutputs = {
+        dStr: diameter + " " + dUnit,
+        vStr: velocity + " " + vUnit,
+        gpm: gpm.toFixed(1) + " GPM",
+        m3h: m3h.toFixed(1) + " m³/h"
+    };
+}
+
+// Write logged row inside the device's persistent browser storage sandbox
+function saveToHistory() {
+    if (currentOutputs.gpm === '-') return; // Block blank entry submissions
+
+    // Pull down historical arrays from storage context, or build clean starting array
+    let history = JSON.parse(localStorage.getItem('magFlowHistory')) || [];
+    
+    // Add current computation snapshot to the log
+    history.push(currentOutputs);
+    
+    // Write array directly to local storage cache
+    localStorage.setItem('magFlowHistory', JSON.stringify(history));
+    
+    // Re-render UI list layout updates matching updated records
+    renderHistory();
+}
+
+function clearHistory() {
+    if(confirm("Are you sure you want to clear your local offline log history?")) {
+        localStorage.removeItem('magFlowHistory');
+        renderHistory();
+    }
+}
+
+function renderHistory() {
+    let history = JSON.parse(localStorage.getItem('magFlowHistory')) || [];
+    let tbody = document.getElementById('historyTableBody');
+    tbody.innerHTML = '';
+
+    if (history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="no-data">No logged calculations saved locally.</td></tr>`;
+        return;
+    }
+
+    // Build log layout loop structurally backward to display freshest items first
+    for (let i = history.length - 1; i >= 0; i--) {
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${history[i].dStr}</td>
+            <td>${history[i].vStr}</td>
+            <td>${history[i].gpm}</td>
+            <td>${history[i].m3h}</td>
+        `;
+        tbody.appendChild(row);
+    }
+}
+
+// Auto-run layout configurations immediately when processing core loads initially
+applyPreset();
+renderHistory();
+</script>
+
+</body>
+</html>
