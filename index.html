@@ -291,6 +291,102 @@
         </div>
     </div>
 
+    <!-- FLOW METER SPECIFICATIONS SECTION -->
+    <h3>📊 Flow Meter Specifications</h3>
+
+    <div class="parameter-section">
+        <label>Meter Manufacturer</label>
+        <span class="label-small">Select the flow meter manufacturer</span>
+        <div class="input-group">
+            <select id="meterManufacturer" onchange="calculateAll()">
+                <option value="generic" selected>Generic Mag Meter</option>
+                <option value="siemens">Siemens</option>
+                <option value="endress">Endress+Hauser</option>
+                <option value="emerson">Emerson</option>
+                <option value="yokogawa">Yokogawa</option>
+                <option value="krohne">KROHNE</option>
+                <option value="custom">Custom/Other</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>Meter Model/Specification</label>
+        <span class="label-small">Enter meter model or leave as custom</span>
+        <div class="input-group">
+            <input type="text" id="meterModel" placeholder="e.g., MAG 3100 or Custom Model" oninput="calculateAll()">
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>Meter Given Flow Rate Range</label>
+        <span class="label-small">Manufacturer's specified min and max flow</span>
+        <div class="parameter-grid">
+            <div class="param-box">
+                <label>Min Flow</label>
+                <input type="number" id="meterFlowMin" value="5" step="0.1" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Max Flow</label>
+                <input type="number" id="meterFlowMax" value="250" step="0.1" oninput="calculateAll()">
+            </div>
+            <div class="param-box">
+                <label>Unit</label>
+                <select id="meterFlowUnit" onchange="calculateAll()">
+                    <option value="lpm" selected>L/min</option>
+                    <option value="m3h">m³/h</option>
+                    <option value="gpm">GPM</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>Meter Repeatability (%)</label>
+        <span class="label-small">Measurement repeatability/reproducibility</span>
+        <div class="input-group">
+            <input type="number" id="meterRepeatability" value="0.2" step="0.1" oninput="calculateAll()">
+        </div>
+    </div>
+
+    <!-- FLUID PROPERTIES SECTION -->
+    <h3>💧 Fluid Properties</h3>
+
+    <div class="parameter-section">
+        <label>Fluid Type</label>
+        <span class="label-small">Select the type of process liquid</span>
+        <div class="input-group">
+            <select id="fluidType" onchange="updateFluidProperties()">
+                <option value="water" selected>Water (Clean/Tap)</option>
+                <option value="seawater">Seawater</option>
+                <option value="wastewater">Wastewater/Dirty Water</option>
+                <option value="oil">Mineral Oil</option>
+                <option value="glycol">Glycol/Antifreeze</option>
+                <option value="milk">Milk/Dairy</option>
+                <option value="food">Food Product</option>
+                <option value="chemical">Chemical Solution</option>
+                <option value="slurry">Slurry/Suspension</option>
+                <option value="custom">Custom Fluid</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>Fluid Conductivity (µS/cm)</label>
+        <span class="label-small">Electrical conductivity of fluid (min requirement ~5 µS/cm)</span>
+        <div class="input-group">
+            <input type="number" id="fluidConductivity" value="1000" step="1" oninput="calculateAll()">
+        </div>
+    </div>
+
+    <div class="parameter-section" id="chemicalSection" style="display: none;">
+        <label>Chemical Concentration (%)</label>
+        <span class="label-small">For chemical solutions only - concentration by weight/volume</span>
+        <div class="input-group">
+            <input type="number" id="chemicalConcentration" value="10" step="0.1" min="0" max="100" oninput="calculateAll()">
+        </div>
+    </div>
+
     <!-- OPERATIONAL CONDITIONS SECTION -->
     <h3>🌡️ Operational Conditions</h3>
 
@@ -331,6 +427,51 @@
                 <label>Max (°C)</label>
                 <input type="number" id="tempMax" value="50" step="0.1" oninput="calculateAll()">
             </div>
+        </div>
+    </div>
+
+    <!-- INSTALLATION DETAILS SECTION -->
+    <h3>🔧 Installation Details</h3>
+
+    <div class="parameter-section">
+        <label>Pipe Length Before Meter (DN - Diameters)</label>
+        <span class="label-small">Straight pipe required upstream (typically 5-10 DN)</span>
+        <div class="input-group">
+            <input type="number" id="pipeLengthBefore" value="10" step="1" min="0" oninput="calculateAll()">
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>Pipe Length After Meter (DN - Diameters)</label>
+        <span class="label-small">Straight pipe required downstream (typically 3-5 DN)</span>
+        <div class="input-group">
+            <input type="number" id="pipeLengthAfter" value="5" step="1" min="0" oninput="calculateAll()">
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>Installation Orientation</label>
+        <span class="label-small">Meter orientation in pipeline</span>
+        <div class="input-group">
+            <select id="installationOrientation" onchange="calculateAll()">
+                <option value="horizontal" selected>Horizontal (Preferred)</option>
+                <option value="vertical_up">Vertical - Flow Upward</option>
+                <option value="vertical_down">Vertical - Flow Downward</option>
+                <option value="inclined">Inclined/Angled</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label>On-Site Installation Conditions</label>
+        <span class="label-small">Environmental factors affecting measurement</span>
+        <div class="input-group">
+            <select id="siteConditions" onchange="calculateAll()">
+                <option value="ideal" selected>Ideal Conditions</option>
+                <option value="good">Good Conditions</option>
+                <option value="moderate">Moderate Conditions (Vibration/EMI)</option>
+                <option value="harsh">Harsh Conditions (High Vibration/EMI)</option>
+            </select>
         </div>
     </div>
 
@@ -450,6 +591,60 @@
                 <span style="font-weight: bold; font-size: 16px;">Compliance Status:</span>
                 <span class="value" id="resComplianceStatus" style="font-size: 16px;">-</span>
             </div>
+        </div>
+
+        <!-- Meter Range Compatibility Section -->
+        <div style="background: #e3f2fd; border-left: 4px solid var(--primary); padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #01579b;">🔍 Meter Range Compatibility</h4>
+            <div class="result-item">
+                <span>Meter Min/Max Flow:</span>
+                <span class="value" id="resMeterRange">-</span>
+            </div>
+            <div class="result-item">
+                <span>Application Flow Range:</span>
+                <span class="value" id="resAppFlow">-</span>
+            </div>
+            <div class="result-item" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #bbb;">
+                <span style="font-weight: bold;">Flow Range Status:</span>
+                <span class="value" id="resMeterRangeStatus" style="font-size: 14px;">-</span>
+            </div>
+        </div>
+
+        <!-- Fluid Properties Compatibility Section -->
+        <div style="background: #f0f4c3; border-left: 4px solid #8bc34a; padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #558b2f;">💧 Fluid Properties Check</h4>
+            <div class="result-item">
+                <span>Fluid Type:</span>
+                <span class="value" id="resFluidType">-</span>
+            </div>
+            <div class="result-item">
+                <span>Conductivity:</span>
+                <span class="value" id="resCondStatus">-</span>
+            </div>
+            <div class="result-item" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #bbb;">
+                <span style="font-weight: bold;">Fluid Compatibility:</span>
+                <span class="value" id="resFluidCompatibility" style="font-size: 14px;">-</span>
+            </div>
+        </div>
+
+        <!-- Installation Requirements Section -->
+        <div style="background: #fce4ec; border-left: 4px solid #e91e63; padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #880e4f;">🔧 Installation Requirements</h4>
+            <div class="result-item">
+                <span>Pipe Length Before (mm):</span>
+                <span class="value" id="resPipeBeforeMM">-</span>
+            </div>
+            <div class="result-item">
+                <span>Pipe Length After (mm):</span>
+                <span class="value" id="resPipeAfterMM">-</span>
+            </div>
+            <div class="result-item">
+                <span>Orientation:</span>
+                <span class="value" id="resOrientation">-</span>
+            </div>
+            <div class="result-item">
+                <span>Installation Impact:</span>
+                <span class="value" id="resInstallationImpact">-</span>
             </div>
         </div>
     </div>
@@ -510,6 +705,39 @@ function manualDiameterInput() {
     calculateAll();
 }
 
+// Fluid properties database
+const fluidDatabase = {
+    'water': { conductivity: 1000, minCond: 5, concentration: 0 },
+    'seawater': { conductivity: 50000, minCond: 5, concentration: 0 },
+    'wastewater': { conductivity: 2000, minCond: 5, concentration: 0 },
+    'oil': { conductivity: 0, minCond: 100, concentration: 0 }, // Non-conductive warning
+    'glycol': { conductivity: 500, minCond: 5, concentration: 50 },
+    'milk': { conductivity: 5000, minCond: 5, concentration: 0 },
+    'food': { conductivity: 2000, minCond: 5, concentration: 0 },
+    'chemical': { conductivity: 3000, minCond: 5, concentration: 10 },
+    'slurry': { conductivity: 1500, minCond: 5, concentration: 0 },
+    'custom': { conductivity: 1000, minCond: 5, concentration: 0 }
+};
+
+function updateFluidProperties() {
+    let fluidType = document.getElementById('fluidType').value;
+    let chemicalSection = document.getElementById('chemicalSection');
+    
+    // Show chemical concentration input only for chemical fluids
+    if (fluidType === 'chemical') {
+        chemicalSection.style.display = 'block';
+    } else {
+        chemicalSection.style.display = 'none';
+    }
+    
+    // Update conductivity if selected from list
+    if (fluidDatabase[fluidType]) {
+        document.getElementById('fluidConductivity').value = fluidDatabase[fluidType].conductivity;
+    }
+    
+    calculateAll();
+}
+
 // Convert flow to L/min
 function convertFlowToLPM(flow, unit) {
     switch(unit) {
@@ -549,6 +777,19 @@ function calculateAll() {
     let flowMax = parseFloat(document.getElementById('flowMax').value);
     let flowUnit = document.getElementById('flowUnit').value;
     
+    // Get meter specifications
+    let meterManufacturer = document.getElementById('meterManufacturer').value;
+    let meterModel = document.getElementById('meterModel').value;
+    let meterFlowMin = parseFloat(document.getElementById('meterFlowMin').value);
+    let meterFlowMax = parseFloat(document.getElementById('meterFlowMax').value);
+    let meterFlowUnit = document.getElementById('meterFlowUnit').value;
+    let meterRepeatability = parseFloat(document.getElementById('meterRepeatability').value);
+    
+    // Get fluid properties
+    let fluidType = document.getElementById('fluidType').value;
+    let fluidConductivity = parseFloat(document.getElementById('fluidConductivity').value);
+    let chemicalConcentration = parseFloat(document.getElementById('chemicalConcentration').value) || 0;
+    
     // Get environmental conditions
     let pressureMin = parseFloat(document.getElementById('pressureMin').value);
     let pressureNormal = parseFloat(document.getElementById('pressureNormal').value);
@@ -557,6 +798,12 @@ function calculateAll() {
     let tempMin = parseFloat(document.getElementById('tempMin').value);
     let tempNormal = parseFloat(document.getElementById('tempNormal').value);
     let tempMax = parseFloat(document.getElementById('tempMax').value);
+    
+    // Get installation details
+    let pipeLengthBefore = parseFloat(document.getElementById('pipeLengthBefore').value);
+    let pipeLengthAfter = parseFloat(document.getElementById('pipeLengthAfter').value);
+    let installationOrientation = document.getElementById('installationOrientation').value;
+    let siteConditions = document.getElementById('siteConditions').value;
     
     // Get accuracy requirements
     let requiredAccuracy = parseFloat(document.getElementById('requiredAccuracy').value);
@@ -583,6 +830,10 @@ function calculateAll() {
     let flowNormalLPM = convertFlowToLPM(flowNormal, flowUnit);
     let flowMaxLPM = convertFlowToLPM(flowMax, flowUnit);
 
+    // Convert meter flow range to L/min
+    let meterFlowMinLPM = convertFlowToLPM(meterFlowMin, meterFlowUnit);
+    let meterFlowMaxLPM = convertFlowToLPM(meterFlowMax, meterFlowUnit);
+
     // Calculate velocities from flow: v = Q / A
     // Flow in m³/s = L/min / 60000
     let flowMinM3S = flowMinLPM / 60000;
@@ -603,9 +854,35 @@ function calculateAll() {
     // Calculate combined system accuracy
     let systemAccuracy = calculateSystemAccuracy(
         meterAccuracy,
+        meterRepeatability,
         pressureMin, pressureNormal, pressureMax,
-        tempMin, tempNormal, tempMax
+        tempMin, tempNormal, tempMax,
+        siteConditions
     );
+
+    // Check meter range compatibility
+    let meterRangeOK = (flowNormalLPM >= meterFlowMinLPM && flowNormalLPM <= meterFlowMaxLPM);
+    let meterRangeStatus = meterRangeOK ? 
+        `✓ OK (${flowNormalLPM.toFixed(1)} L/min within range)` :
+        `✗ OUT OF RANGE (${flowNormalLPM.toFixed(1)} L/min outside ${meterFlowMinLPM.toFixed(1)}-${meterFlowMaxLPM.toFixed(1)} L/min)`;
+    let meterRangeColor = meterRangeOK ? 'accuracy-high' : 'accuracy-low';
+
+    // Check fluid conductivity
+    let minConductivity = fluidDatabase[fluidType]?.minCond || 5;
+    let conductivityOK = fluidConductivity >= minConductivity || fluidType === 'water' || fluidType === 'seawater';
+    let conductivityStatus = conductivityOK ? 
+        `✓ OK (${fluidConductivity.toFixed(0)} µS/cm)` :
+        `✗ TOO LOW (${fluidConductivity.toFixed(0)} µS/cm, min ${minConductivity} required)`;
+    let conductivityColor = conductivityOK ? 'accuracy-high' : 'accuracy-low';
+
+    // Check fluid compatibility with mag meter
+    let fluidCompatibility = checkFluidCompatibility(fluidType, fluidConductivity, chemicalConcentration);
+
+    // Calculate installation impact
+    let pipeDiameterMM = dInMetres * 1000;
+    let pipeBeforeMM = pipeLengthBefore * pipeDiameterMM;
+    let pipeAfterMM = pipeLengthAfter * pipeDiameterMM;
+    let installationPenalty = calculateInstallationPenalty(installationOrientation, siteConditions, pipeLengthBefore);
 
     // Determine compliance
     let compliant = systemAccuracy <= requiredAccuracy;
@@ -632,6 +909,22 @@ function calculateAll() {
     document.getElementById('resSystemAccuracy').innerHTML = `<span class="${compliant ? 'accuracy-high' : 'accuracy-low'}">${systemAccuracy.toFixed(2)}%</span>`;
     document.getElementById('resComplianceStatus').innerHTML = `<span class="${complianceColor}">${complianceStatus}</span>`;
 
+    // Update meter range compatibility
+    document.getElementById('resMeterRange').innerText = `${meterFlowMinLPM.toFixed(1)} - ${meterFlowMaxLPM.toFixed(1)} L/min`;
+    document.getElementById('resAppFlow').innerText = `${flowMinLPM.toFixed(1)} - ${flowMaxLPM.toFixed(1)} L/min`;
+    document.getElementById('resMeterRangeStatus').innerHTML = `<span class="${meterRangeColor}">${meterRangeStatus}</span>`;
+
+    // Update fluid properties
+    document.getElementById('resFluidType').innerText = fluidType.charAt(0).toUpperCase() + fluidType.slice(1).replace('_', ' ');
+    document.getElementById('resCondStatus').innerHTML = `<span class="${conductivityColor}">${conductivityStatus}</span>`;
+    document.getElementById('resFluidCompatibility').innerHTML = `<span class="${fluidCompatibility.ok ? 'accuracy-high' : 'accuracy-low'}">${fluidCompatibility.status}</span>`;
+
+    // Update installation details
+    document.getElementById('resPipeBeforeMM').innerText = pipeBeforeMM.toFixed(0) + " mm (" + pipeLengthBefore + " DN)";
+    document.getElementById('resPipeAfterMM').innerText = pipeAfterMM.toFixed(0) + " mm (" + pipeLengthAfter + " DN)";
+    document.getElementById('resOrientation').innerText = installationOrientation.replace('_', ' ').toUpperCase();
+    document.getElementById('resInstallationImpact').innerHTML = `<span class="${installationPenalty.penalty <= 0.3 ? 'accuracy-high' : installationPenalty.penalty <= 0.6 ? 'accuracy-med' : 'accuracy-low'}">+${(installationPenalty.penalty * 100).toFixed(2)}% accuracy loss</span>`;
+
     // Store for history
     currentOutputs = {
         diameter: diameter + " " + dUnit,
@@ -642,9 +935,12 @@ function calculateAll() {
     };
 }
 
-function calculateSystemAccuracy(meterAcc, pMin, pNormal, pMax, tMin, tNormal, tMax) {
+function calculateSystemAccuracy(meterAcc, repeatability, pMin, pNormal, pMax, tMin, tNormal, tMax, siteConditions) {
     // Meter accuracy is the base
     let baseAccuracy = meterAcc;
+    
+    // Add repeatability/reproducibility error
+    let repeatError = repeatability || 0.2;
     
     // Pressure effect: ±0.2% per 10 bar deviation
     let pressureDeviation = Math.max(
@@ -660,14 +956,75 @@ function calculateSystemAccuracy(meterAcc, pMin, pNormal, pMax, tMin, tNormal, t
     );
     let tempError = tempDeviation * 0.1;
     
+    // Site conditions penalty
+    let siteConditionsPenalty = 0;
+    switch(siteConditions) {
+        case 'ideal': siteConditionsPenalty = 0; break;
+        case 'good': siteConditionsPenalty = 0.1; break;
+        case 'moderate': siteConditionsPenalty = 0.3; break;
+        case 'harsh': siteConditionsPenalty = 0.5; break;
+    }
+    
     // Combined accuracy (RSS - Root Sum of Squares method)
     let totalAccuracy = Math.sqrt(
         Math.pow(baseAccuracy, 2) +
+        Math.pow(repeatError, 2) +
         Math.pow(pressureError, 2) +
-        Math.pow(tempError, 2)
+        Math.pow(tempError, 2) +
+        Math.pow(siteConditionsPenalty, 2)
     );
     
     return totalAccuracy;
+}
+
+function checkFluidCompatibility(fluidType, conductivity, concentration) {
+    let compatible = true;
+    let status = "";
+    
+    if (fluidType === 'oil') {
+        compatible = false;
+        status = "✗ Non-conductive oil - NOT suitable for magnetic flow meter";
+    } else if (fluidType === 'slurry' && concentration > 30) {
+        compatible = false;
+        status = "✗ High slurry concentration - May cause electrode coating";
+    } else if (conductivity < 5 && fluidType !== 'oil') {
+        compatible = false;
+        status = "✗ Too low conductivity - Meter cannot function properly";
+    } else if (fluidType === 'chemical' && concentration > 80) {
+        status = "⚠ Very high concentration - Verify material compatibility";
+        compatible = true;
+    } else {
+        compatible = true;
+        status = "✓ Suitable for magnetic flow meter";
+    }
+    
+    return { ok: compatible, status: status };
+}
+
+function calculateInstallationPenalty(orientation, siteConditions, pipeLengthBefore) {
+    let penalty = 0;
+    
+    // Orientation penalty
+    if (orientation === 'vertical_up') {
+        penalty += 0.15; // Air trapping risk
+    } else if (orientation === 'vertical_down') {
+        penalty += 0.1;
+    } else if (orientation === 'inclined') {
+        penalty += 0.2;
+    }
+    
+    // Site conditions penalty
+    switch(siteConditions) {
+        case 'moderate': penalty += 0.15; break;
+        case 'harsh': penalty += 0.3; break;
+    }
+    
+    // Insufficient pipe length penalty
+    if (pipeLengthBefore < 5) {
+        penalty += 0.25; // Turbulence effects
+    }
+    
+    return { penalty: penalty };
 }
 
 function clearResults() {
@@ -675,7 +1032,6 @@ function clearResults() {
     document.getElementById('resVelocity').innerText = "-";
     document.getElementById('resLPM').innerText = "-";
     document.getElementById('resM3H').innerText = "-";
-    document.getElementById('resGPM').innerText = "-";
     document.getElementById('resMinVelocity').innerText = "-";
     document.getElementById('resMaxVelocity').innerText = "-";
     document.getElementById('resVelocityRange').innerText = "-";
@@ -684,6 +1040,16 @@ function clearResults() {
     document.getElementById('resMeterAccuracy').innerText = "-";
     document.getElementById('resSystemAccuracy').innerText = "-";
     document.getElementById('resComplianceStatus').innerText = "-";
+    document.getElementById('resMeterRange').innerText = "-";
+    document.getElementById('resAppFlow').innerText = "-";
+    document.getElementById('resMeterRangeStatus').innerText = "-";
+    document.getElementById('resFluidType').innerText = "-";
+    document.getElementById('resCondStatus').innerText = "-";
+    document.getElementById('resFluidCompatibility').innerText = "-";
+    document.getElementById('resPipeBeforeMM').innerText = "-";
+    document.getElementById('resPipeAfterMM').innerText = "-";
+    document.getElementById('resOrientation').innerText = "-";
+    document.getElementById('resInstallationImpact').innerText = "-";
 }
 
 // Save to offline history
@@ -732,11 +1098,6 @@ function generatePDF() {
     const element = document.querySelector('.calculator-card');
     const timestamp = new Date().toLocaleString();
     
-    // Create a wrapper for better formatting
-    const content = document.createElement('div');
-    content.style.padding = '20px';
-    content.style.fontFamily = 'Arial, sans-serif';
-    
     let html = `
     <h1 style="text-align: center; color: #0056b3; margin-bottom: 5px;">Mag Flow Meter Calculator Report</h1>
     <p style="text-align: center; color: #666; font-size: 12px; margin-bottom: 20px;">Generated: ${timestamp}</p>
@@ -747,6 +1108,44 @@ function generatePDF() {
             <td style="padding: 8px; border: 1px solid #ddd;"><strong>Diameter:</strong></td>
             <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('diameter').value} ${document.getElementById('diameterUnit').value}</td>
         </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Flow Meter Specifications</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Manufacturer:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterManufacturer').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Model:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterModel').value || 'Not specified'}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Given Flow Range:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterFlowMin').value} - ${document.getElementById('meterFlowMax').value} ${document.getElementById('meterFlowUnit').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Repeatability:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">±${document.getElementById('meterRepeatability').value}%</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Fluid Properties</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Fluid Type:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('fluidType').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Conductivity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('fluidConductivity').value} µS/cm</td>
+        </tr>
+        ${document.getElementById('fluidType').value === 'chemical' ? `
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Chemical Concentration:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('chemicalConcentration').value}%</td>
+        </tr>
+        ` : ''}
     </table>
     
     <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Operational Conditions</h2>
@@ -777,6 +1176,26 @@ function generatePDF() {
         </tr>
     </table>
     
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Installation Details</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Pipe Length Before (DN):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('pipeLengthBefore').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Pipe Length After (DN):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('pipeLengthAfter').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Installation Orientation:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('installationOrientation').value.replace('_', ' ')}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Site Conditions:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('siteConditions').value}</td>
+        </tr>
+    </table>
+    
     <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Accuracy Requirements</h2>
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
         <tr>
@@ -789,7 +1208,7 @@ function generatePDF() {
         </tr>
     </table>
     
-    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Calculation Results (Normal Flow)</h2>
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Calculation Results</h2>
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
         <tr>
             <td style="padding: 8px; border: 1px solid #ddd;"><strong>Pipe Area:</strong></td>
@@ -807,37 +1226,37 @@ function generatePDF() {
             <td style="padding: 8px; border: 1px solid #ddd;"><strong>Flow Rate (m³/h):</strong></td>
             <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resM3H').innerText}</td>
         </tr>
-    </table>
-    
-    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Velocity Range Analysis</h2>
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
         <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Minimum Velocity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Min Velocity:</strong></td>
             <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMinVelocity').innerText}</td>
         </tr>
         <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Maximum Velocity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Max Velocity:</strong></td>
             <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMaxVelocity').innerText}</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Velocity Range:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resVelocityRange').innerText}</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Flow Range:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resFlowRange').innerText}</td>
         </tr>
     </table>
     
-    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Accuracy Compliance</h2>
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Compliance Analysis</h2>
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
         <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Required Accuracy:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resRequiredAccuracy').innerText}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Meter Range (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMeterRange').innerText}</td>
         </tr>
         <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Meter Accuracy:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMeterAccuracy').innerText}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Application Flow (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resAppFlow').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Flow Range Status:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMeterRangeStatus').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Fluid Compatibility:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resFluidCompatibility').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Installation Impact:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resInstallationImpact').innerText}</td>
         </tr>
         <tr style="background-color: #f0f0f0; font-weight: bold;">
             <td style="padding: 8px; border: 1px solid #ddd;"><strong>Combined System Accuracy:</strong></td>
@@ -850,7 +1269,7 @@ function generatePDF() {
     </table>
     
     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 11px;">
-        <p>This report was generated by the Advanced Mag Flow Meter Calculator</p>
+        <p>This comprehensive report was generated by the Advanced Mag Flow Meter Calculator</p>
     </div>
     `;
     
