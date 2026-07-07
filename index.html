@@ -252,8 +252,10 @@
         ✓ MAESTRO ASIA PTE LTD - Professional Flowmeter Selection Tool
     </p>
     
+    <!-- PIPE CONFIGURATION SECTION -->
     <h3>📏 Pipe Configuration</h3>
     
+    <!-- Schedule 40 Presets -->
     <div class="input-group">
         <label for="pipePreset">Select Schedule 40 Pipe Size</label>
         <select id="pipePreset" onchange="applyPreset()">
@@ -276,6 +278,7 @@
 
     <div class="divider">OR EDIT MANUALLY</div>
 
+    <!-- Pipe Diameter Manual Inputs -->
     <div class="row">
         <div class="input-group">
             <label for="diameter">Pipe Diameter (D)</label>
@@ -291,9 +294,8 @@
         </div>
     </div>
 
+    <!-- FLOW METER SPECIFICATIONS SECTION -->
     <h3>📊 MAESTRO ASIA LDG Series Specifications</h3>
-
-    <input type="hidden" id="meterManufacturer" value="MAESTRO ASIA">
 
     <div class="parameter-section">
         <label>Meter Manufacturer</label>
@@ -358,6 +360,7 @@
         </div>
     </div>
 
+    <!-- FLUID PROPERTIES SECTION -->
     <h3>💧 Fluid Properties</h3>
 
     <div class="parameter-section">
@@ -395,8 +398,10 @@
         </div>
     </div>
 
+    <!-- OPERATIONAL CONDITIONS SECTION -->
     <h3>🌡️ Operational Conditions</h3>
 
+    <!-- PRESSURE PARAMETER -->
     <div class="parameter-section">
         <label>Pressure (bar)</label>
         <span class="label-small">Set minimum, normal, and maximum pressure</span>
@@ -416,6 +421,7 @@
         </div>
     </div>
 
+    <!-- TEMPERATURE PARAMETER -->
     <div class="parameter-section">
         <label>Temperature (°C)</label>
         <span class="label-small">Set minimum, normal, and maximum temperature</span>
@@ -435,6 +441,7 @@
         </div>
     </div>
 
+    <!-- INSTALLATION DETAILS SECTION -->
     <h3>🔧 Installation Details</h3>
 
     <div class="parameter-section">
@@ -479,6 +486,7 @@
         </div>
     </div>
 
+    <!-- FLOW RATE INPUT -->
     <div class="parameter-section">
         <label>Fluid Flow Rate</label>
         <span class="label-small">Set minimum, normal, and maximum flow</span>
@@ -506,8 +514,10 @@
         </div>
     </div>
 
+    <!-- ACCURACY REQUIREMENTS SECTION -->
     <h3>🎯 Accuracy Requirements</h3>
 
+    <!-- REQUIRED ACCURACY SETPOINT -->
     <div class="parameter-section">
         <label>Required Accuracy Setpoint (%)</label>
         <span class="label-small">Maximum allowable error for your application</span>
@@ -516,6 +526,7 @@
         </div>
     </div>
 
+    <!-- METER ACCURACY (User Configurable) -->
     <div class="parameter-section">
         <label>Meter Accuracy (%)</label>
         <span class="label-small">Adjust meter accuracy (MAESTRO standard: ±0.5% of rate)</span>
@@ -524,10 +535,12 @@
         </div>
     </div>
 
+    <!-- RESULTS SECTION -->
     <div class="results-box">
         <h3 style="margin-top: 0; margin-bottom: 15px;">📊 Calculation Results</h3>
         
         <div class="results-grid">
+            <!-- Left Column: Flow Calculations -->
             <div class="result-section">
                 <h4>Velocity from Flow (Normal)</h4>
                 <div class="result-item">
@@ -548,6 +561,7 @@
                 </div>
             </div>
 
+            <!-- Right Column: Velocity Range Analysis -->
             <div class="result-section">
                 <h4>Velocity Range Analysis</h4>
                 <div class="result-item">
@@ -569,6 +583,7 @@
             </div>
         </div>
 
+        <!-- Accuracy Comparison Section -->
         <div style="background: #fff3cd; border-left: 4px solid var(--warning); padding: 12px; border-radius: 4px; margin-top: 15px;">
             <h4 style="margin: 0 0 10px 0; color: #856404;">📋 Accuracy Compliance Check</h4>
             <div class="result-item">
@@ -588,3 +603,762 @@
                 <span class="value" id="resComplianceStatus" style="font-size: 16px;">-</span>
             </div>
         </div>
+
+        <!-- Meter Range Compatibility Section -->
+        <div style="background: #e3f2fd; border-left: 4px solid var(--primary); padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #01579b;">🔍 Meter Range Compatibility</h4>
+            <div class="result-item">
+                <span>Meter Min/Max Flow:</span>
+                <span class="value" id="resMeterRange">-</span>
+            </div>
+            <div class="result-item">
+                <span>Application Flow Range:</span>
+                <span class="value" id="resAppFlow">-</span>
+            </div>
+            <div class="result-item" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #bbb;">
+                <span style="font-weight: bold;">Flow Range Status:</span>
+                <span class="value" id="resMeterRangeStatus" style="font-size: 14px;">-</span>
+            </div>
+        </div>
+
+        <!-- Fluid Properties Compatibility Section -->
+        <div style="background: #f0f4c3; border-left: 4px solid #8bc34a; padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #558b2f;">💧 Fluid Properties Check</h4>
+            <div class="result-item">
+                <span>Fluid Type:</span>
+                <span class="value" id="resFluidType">-</span>
+            </div>
+            <div class="result-item">
+                <span>Conductivity:</span>
+                <span class="value" id="resCondStatus">-</span>
+            </div>
+            <div class="result-item" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #bbb;">
+                <span style="font-weight: bold;">Fluid Compatibility:</span>
+                <span class="value" id="resFluidCompatibility" style="font-size: 14px;">-</span>
+            </div>
+        </div>
+
+        <!-- Installation Requirements Section -->
+        <div style="background: #fce4ec; border-left: 4px solid #e91e63; padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #880e4f;">🔧 Installation Requirements</h4>
+            <div class="result-item">
+                <span>Pipe Length Before (mm):</span>
+                <span class="value" id="resPipeBeforeMM">-</span>
+            </div>
+            <div class="result-item">
+                <span>Pipe Length After (mm):</span>
+                <span class="value" id="resPipeAfterMM">-</span>
+            </div>
+            <div class="result-item">
+                <span>Orientation:</span>
+                <span class="value" id="resOrientation">-</span>
+            </div>
+            <div class="result-item">
+                <span>Installation Impact:</span>
+                <span class="value" id="resInstallationImpact">-</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row" style="margin-top: 20px; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="calculateAll()" style="flex: 1; min-width: 150px;">🔄 Recalculate</button>
+        <button class="btn btn-save" onclick="saveToHistory()" style="flex: 1; min-width: 150px;">💾 Save Log</button>
+        <button class="btn" onclick="generatePDF()" style="flex: 1; min-width: 150px; background-color: #e74c3c; color: white; margin-top: 10px;">📄 Export PDF</button>
+    </div>
+</div>
+
+<!-- MAESTRO ASIA LDG Series - Calculation History -->
+<div class="history-card">
+    <div class="history-header">
+        <h3>📋 MAESTRO ASIA - Calculation History</h3>
+        <button class="btn-clear" onclick="clearHistory()">Clear All</button>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pipe Diameter</th>
+                    <th>Flow (L/min)</th>
+                    <th>Velocity (m/s)</th>
+                    <th>MAESTRO Accuracy (%)</th>
+                    <th>Compliant</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <!-- Data injected dynamically by script -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Global state for current computations
+let currentOutputs = {
+    diameter: '',
+    flowNormal: '',
+    velocityNormal: '',
+    meterAccuracy: '',
+    compliant: ''
+};
+
+function applyPreset() {
+    let presetValue = document.getElementById('pipePreset').value;
+    if (presetValue !== "custom") {
+        document.getElementById('diameter').value = presetValue;
+        document.getElementById('diameterUnit').value = "inch";
+    }
+    calculateAll();
+}
+
+function manualDiameterInput() {
+    document.getElementById('pipePreset').value = "custom";
+    calculateAll();
+}
+
+// Fluid properties database
+const fluidDatabase = {
+    'water': { conductivity: 1000, minCond: 5, concentration: 0 },
+    'seawater': { conductivity: 50000, minCond: 5, concentration: 0 },
+    'wastewater': { conductivity: 2000, minCond: 5, concentration: 0 },
+    'oil': { conductivity: 0, minCond: 100, concentration: 0 }, // Non-conductive warning
+    'glycol': { conductivity: 500, minCond: 5, concentration: 50 },
+    'milk': { conductivity: 5000, minCond: 5, concentration: 0 },
+    'food': { conductivity: 2000, minCond: 5, concentration: 0 },
+    'chemical': { conductivity: 3000, minCond: 5, concentration: 10 },
+    'slurry': { conductivity: 1500, minCond: 5, concentration: 0 },
+    'custom': { conductivity: 1000, minCond: 5, concentration: 0 }
+};
+
+function updateFluidProperties() {
+    let fluidType = document.getElementById('fluidType').value;
+    let chemicalSection = document.getElementById('chemicalSection');
+    
+    // Show chemical concentration input only for chemical fluids
+    if (fluidType === 'chemical') {
+        chemicalSection.style.display = 'block';
+    } else {
+        chemicalSection.style.display = 'none';
+    }
+    
+    // Update conductivity if selected from list
+    if (fluidDatabase[fluidType]) {
+        document.getElementById('fluidConductivity').value = fluidDatabase[fluidType].conductivity;
+    }
+    
+    calculateAll();
+}
+
+function updateMeterSpecifications() {
+    // MAESTRO ASIA LDG series specifications are standardized
+    // Update display to show selected model info
+    let model = document.getElementById('meterModel').value;
+    let modelInfo = {
+        'ldg-b': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 },
+        'ldg-y': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 },
+        'ldg-f': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 },
+        'ldg-a': { accuracy: 0.5, repeatability: 0.1, minFlow: 3, maxFlow: 300 }
+    };
+    
+    if (modelInfo[model]) {
+        document.getElementById('meterAccuracy').value = modelInfo[model].accuracy;
+        document.getElementById('meterRepeatability').value = modelInfo[model].repeatability;
+        document.getElementById('meterFlowMin').value = modelInfo[model].minFlow;
+        document.getElementById('meterFlowMax').value = modelInfo[model].maxFlow;
+    }
+    
+    calculateAll();
+}
+
+// Convert flow to L/min
+function convertFlowToLPM(flow, unit) {
+    switch(unit) {
+        case 'lpm':
+            return flow;
+        case 'm3h':
+            return flow * (1000 / 60);
+        case 'gpm':
+            return flow * 3.78541;
+        default:
+            return flow;
+    }
+}
+
+// Convert flow from L/min to other units
+function convertFlowFromLPM(lpm, unit) {
+    switch(unit) {
+        case 'lpm':
+            return lpm;
+        case 'm3h':
+            return lpm * (60 / 1000);
+        case 'gpm':
+            return lpm / 3.78541;
+        default:
+            return lpm;
+    }
+}
+
+function calculateAll() {
+    // Get pipe diameter
+    let diameter = parseFloat(document.getElementById('diameter').value);
+    let dUnit = document.getElementById('diameterUnit').value;
+    
+    // Get flow values in their specified unit
+    let flowMin = parseFloat(document.getElementById('flowMin').value);
+    let flowNormal = parseFloat(document.getElementById('flowNormal').value);
+    let flowMax = parseFloat(document.getElementById('flowMax').value);
+    let flowUnit = document.getElementById('flowUnit').value;
+    
+    // Get meter specifications
+    let meterManufacturer = document.getElementById('meterManufacturer').value;
+    let meterModel = document.getElementById('meterModel').value;
+    let meterFlowMin = parseFloat(document.getElementById('meterFlowMin').value);
+    let meterFlowMax = parseFloat(document.getElementById('meterFlowMax').value);
+    let meterFlowUnit = document.getElementById('meterFlowUnit').value;
+    let meterRepeatability = parseFloat(document.getElementById('meterRepeatability').value);
+    
+    // Get fluid properties
+    let fluidType = document.getElementById('fluidType').value;
+    let fluidConductivity = parseFloat(document.getElementById('fluidConductivity').value);
+    let chemicalConcentration = parseFloat(document.getElementById('chemicalConcentration').value) || 0;
+    
+    // Get environmental conditions
+    let pressureMin = parseFloat(document.getElementById('pressureMin').value);
+    let pressureNormal = parseFloat(document.getElementById('pressureNormal').value);
+    let pressureMax = parseFloat(document.getElementById('pressureMax').value);
+    
+    let tempMin = parseFloat(document.getElementById('tempMin').value);
+    let tempNormal = parseFloat(document.getElementById('tempNormal').value);
+    let tempMax = parseFloat(document.getElementById('tempMax').value);
+    
+    // Get installation details
+    let pipeLengthBefore = parseFloat(document.getElementById('pipeLengthBefore').value);
+    let pipeLengthAfter = parseFloat(document.getElementById('pipeLengthAfter').value);
+    let installationOrientation = document.getElementById('installationOrientation').value;
+    let siteConditions = document.getElementById('siteConditions').value;
+    
+    // Get accuracy requirements
+    let requiredAccuracy = parseFloat(document.getElementById('requiredAccuracy').value);
+    let meterAccuracy = parseFloat(document.getElementById('meterAccuracy').value);
+
+    // Validation
+    if (isNaN(diameter) || diameter <= 0 || 
+        isNaN(flowNormal) || flowNormal <= 0) {
+        clearResults();
+        return;
+    }
+
+    // Convert diameter to metres
+    let dInMetres = diameter;
+    if (dUnit === "mm") dInMetres = diameter / 1000;
+    if (dUnit === "inch") dInMetres = diameter * 0.0254;
+
+    // Calculate pipe cross-sectional area
+    let radius = dInMetres / 2;
+    let areaM2 = Math.PI * Math.pow(radius, 2);
+
+    // Convert flows to L/min
+    let flowMinLPM = convertFlowToLPM(flowMin, flowUnit);
+    let flowNormalLPM = convertFlowToLPM(flowNormal, flowUnit);
+    let flowMaxLPM = convertFlowToLPM(flowMax, flowUnit);
+
+    // Convert meter flow range to L/min
+    let meterFlowMinLPM = convertFlowToLPM(meterFlowMin, meterFlowUnit);
+    let meterFlowMaxLPM = convertFlowToLPM(meterFlowMax, meterFlowUnit);
+
+    // Calculate velocities from flow: v = Q / A
+    // Flow in m³/s = L/min / 60000
+    let flowMinM3S = flowMinLPM / 60000;
+    let flowNormalM3S = flowNormalLPM / 60000;
+    let flowMaxM3S = flowMaxLPM / 60000;
+
+    let velocityMin = flowMinM3S / areaM2;
+    let velocityNormal = flowNormalM3S / areaM2;
+    let velocityMax = flowMaxM3S / areaM2;
+
+    // Calculate other flow formats for normal flow
+    let normalM3H = flowNormalLPM * (60 / 1000);
+    let normalGPM = flowNormalLPM / 3.78541;
+
+    let velocityRange = velocityMax - velocityMin;
+    let flowRange = flowMaxLPM - flowMinLPM;
+
+    // Calculate combined system accuracy
+    let systemAccuracy = calculateSystemAccuracy(
+        meterAccuracy,
+        meterRepeatability,
+        pressureMin, pressureNormal, pressureMax,
+        tempMin, tempNormal, tempMax,
+        siteConditions
+    );
+
+    // Check meter range compatibility
+    let meterRangeOK = (flowNormalLPM >= meterFlowMinLPM && flowNormalLPM <= meterFlowMaxLPM);
+    let meterRangeStatus = meterRangeOK ? 
+        `✓ OK (${flowNormalLPM.toFixed(1)} L/min within range)` :
+        `✗ OUT OF RANGE (${flowNormalLPM.toFixed(1)} L/min outside ${meterFlowMinLPM.toFixed(1)}-${meterFlowMaxLPM.toFixed(1)} L/min)`;
+    let meterRangeColor = meterRangeOK ? 'accuracy-high' : 'accuracy-low';
+
+    // Check fluid conductivity
+    let minConductivity = fluidDatabase[fluidType]?.minCond || 5;
+    let conductivityOK = fluidConductivity >= minConductivity || fluidType === 'water' || fluidType === 'seawater';
+    let conductivityStatus = conductivityOK ? 
+        `✓ OK (${fluidConductivity.toFixed(0)} µS/cm)` :
+        `✗ TOO LOW (${fluidConductivity.toFixed(0)} µS/cm, min ${minConductivity} required)`;
+    let conductivityColor = conductivityOK ? 'accuracy-high' : 'accuracy-low';
+
+    // Check fluid compatibility with mag meter
+    let fluidCompatibility = checkFluidCompatibility(fluidType, fluidConductivity, chemicalConcentration);
+
+    // Calculate installation impact
+    let pipeDiameterMM = dInMetres * 1000;
+    let pipeBeforeMM = pipeLengthBefore * pipeDiameterMM;
+    let pipeAfterMM = pipeLengthAfter * pipeDiameterMM;
+    let installationPenalty = calculateInstallationPenalty(installationOrientation, siteConditions, pipeLengthBefore);
+
+    // Determine compliance
+    let compliant = systemAccuracy <= requiredAccuracy;
+    let complianceStatus = compliant ? 
+        `✓ COMPLIANT (${systemAccuracy.toFixed(2)}% ≤ ${requiredAccuracy.toFixed(2)}%)` :
+        `✗ NON-COMPLIANT (${systemAccuracy.toFixed(2)}% > ${requiredAccuracy.toFixed(2)}%)`;
+    
+    let complianceColor = compliant ? 'accuracy-high' : 'accuracy-low';
+
+    // Update UI
+    document.getElementById('resArea').innerText = areaM2.toFixed(5) + " m²";
+    document.getElementById('resVelocity').innerText = velocityNormal.toFixed(3) + " m/s";
+    document.getElementById('resLPM').innerText = flowNormalLPM.toFixed(2) + " L/min";
+    document.getElementById('resM3H').innerText = normalM3H.toFixed(2) + " m³/h";
+    
+    document.getElementById('resMinVelocity').innerText = velocityMin.toFixed(3) + " m/s";
+    document.getElementById('resMaxVelocity').innerText = velocityMax.toFixed(3) + " m/s";
+    document.getElementById('resVelocityRange').innerText = velocityRange.toFixed(3) + " m/s";
+    document.getElementById('resFlowRange').innerText = flowRange.toFixed(2) + " L/min";
+
+    // Update accuracy displays
+    document.getElementById('resRequiredAccuracy').innerText = requiredAccuracy.toFixed(2) + "%";
+    document.getElementById('resMeterAccuracy').innerText = meterAccuracy.toFixed(2) + "%";
+    document.getElementById('resSystemAccuracy').innerHTML = `<span class="${compliant ? 'accuracy-high' : 'accuracy-low'}">${systemAccuracy.toFixed(2)}%</span>`;
+    document.getElementById('resComplianceStatus').innerHTML = `<span class="${complianceColor}">${complianceStatus}</span>`;
+
+    // Update meter range compatibility
+    document.getElementById('resMeterRange').innerText = `${meterFlowMinLPM.toFixed(1)} - ${meterFlowMaxLPM.toFixed(1)} L/min`;
+    document.getElementById('resAppFlow').innerText = `${flowMinLPM.toFixed(1)} - ${flowMaxLPM.toFixed(1)} L/min`;
+    document.getElementById('resMeterRangeStatus').innerHTML = `<span class="${meterRangeColor}">${meterRangeStatus}</span>`;
+
+    // Update fluid properties
+    document.getElementById('resFluidType').innerText = fluidType.charAt(0).toUpperCase() + fluidType.slice(1).replace('_', ' ');
+    document.getElementById('resCondStatus').innerHTML = `<span class="${conductivityColor}">${conductivityStatus}</span>`;
+    document.getElementById('resFluidCompatibility').innerHTML = `<span class="${fluidCompatibility.ok ? 'accuracy-high' : 'accuracy-low'}">${fluidCompatibility.status}</span>`;
+
+    // Update installation details
+    document.getElementById('resPipeBeforeMM').innerText = pipeBeforeMM.toFixed(0) + " mm (" + pipeLengthBefore + " DN)";
+    document.getElementById('resPipeAfterMM').innerText = pipeAfterMM.toFixed(0) + " mm (" + pipeLengthAfter + " DN)";
+    document.getElementById('resOrientation').innerText = installationOrientation.replace('_', ' ').toUpperCase();
+    document.getElementById('resInstallationImpact').innerHTML = `<span class="${installationPenalty.penalty <= 0.3 ? 'accuracy-high' : installationPenalty.penalty <= 0.6 ? 'accuracy-med' : 'accuracy-low'}">+${(installationPenalty.penalty * 100).toFixed(2)}% accuracy loss</span>`;
+
+    // Store for history
+    currentOutputs = {
+        diameter: diameter + " " + dUnit,
+        flowNormal: flowNormalLPM.toFixed(1) + " L/min",
+        velocityNormal: velocityNormal.toFixed(3) + " m/s",
+        meterAccuracy: meterAccuracy.toFixed(2) + "%",
+        compliant: compliant ? "✓ YES" : "✗ NO"
+    };
+}
+
+function calculateSystemAccuracy(meterAcc, repeatability, pMin, pNormal, pMax, tMin, tNormal, tMax, siteConditions) {
+    // Meter accuracy is the base
+    let baseAccuracy = meterAcc;
+    
+    // Add repeatability/reproducibility error
+    let repeatError = repeatability || 0.2;
+    
+    // Pressure effect: ±0.2% per 10 bar deviation
+    let pressureDeviation = Math.max(
+        Math.abs(pMin - pNormal),
+        Math.abs(pMax - pNormal)
+    );
+    let pressureError = (pressureDeviation / 10) * 0.2;
+    
+    // Temperature effect: ±0.1% per °C deviation
+    let tempDeviation = Math.max(
+        Math.abs(tMin - tNormal),
+        Math.abs(tMax - tNormal)
+    );
+    let tempError = tempDeviation * 0.1;
+    
+    // Site conditions penalty
+    let siteConditionsPenalty = 0;
+    switch(siteConditions) {
+        case 'ideal': siteConditionsPenalty = 0; break;
+        case 'good': siteConditionsPenalty = 0.1; break;
+        case 'moderate': siteConditionsPenalty = 0.3; break;
+        case 'harsh': siteConditionsPenalty = 0.5; break;
+    }
+    
+    // Combined accuracy (RSS - Root Sum of Squares method)
+    let totalAccuracy = Math.sqrt(
+        Math.pow(baseAccuracy, 2) +
+        Math.pow(repeatError, 2) +
+        Math.pow(pressureError, 2) +
+        Math.pow(tempError, 2) +
+        Math.pow(siteConditionsPenalty, 2)
+    );
+    
+    return totalAccuracy;
+}
+
+function checkFluidCompatibility(fluidType, conductivity, concentration) {
+    let compatible = true;
+    let status = "";
+    
+    // MAESTRO ASIA LDG Series Requirements: Minimum conductivity 5 µS/cm
+    if (fluidType === 'oil') {
+        compatible = false;
+        status = "✗ Non-conductive oil - NOT suitable for MAESTRO electromagnetic flow meter";
+    } else if (fluidType === 'slurry' && concentration > 30) {
+        compatible = false;
+        status = "✗ High slurry concentration - May cause electrode coating (MAESTRO max 30%)";
+    } else if (conductivity < 5 && fluidType !== 'oil') {
+        compatible = false;
+        status = "✗ Conductivity too low - MAESTRO requires minimum 5 µS/cm";
+    } else if (fluidType === 'chemical' && concentration > 80) {
+        status = "⚠ High concentration - Verify with MAESTRO technical support for compatibility";
+        compatible = true;
+    } else {
+        compatible = true;
+        status = "✓ Suitable for MAESTRO ASIA LDG Series";
+    }
+    
+    return { ok: compatible, status: status };
+}
+
+function calculateInstallationPenalty(orientation, siteConditions, pipeLengthBefore) {
+    let penalty = 0;
+    
+    // Orientation penalty
+    if (orientation === 'vertical_up') {
+        penalty += 0.15; // Air trapping risk
+    } else if (orientation === 'vertical_down') {
+        penalty += 0.1;
+    } else if (orientation === 'inclined') {
+        penalty += 0.2;
+    }
+    
+    // Site conditions penalty
+    switch(siteConditions) {
+        case 'moderate': penalty += 0.15; break;
+        case 'harsh': penalty += 0.3; break;
+    }
+    
+    // Insufficient pipe length penalty
+    if (pipeLengthBefore < 5) {
+        penalty += 0.25; // Turbulence effects
+    }
+    
+    return { penalty: penalty };
+}
+
+function clearResults() {
+    document.getElementById('resArea').innerText = "-";
+    document.getElementById('resVelocity').innerText = "-";
+    document.getElementById('resLPM').innerText = "-";
+    document.getElementById('resM3H').innerText = "-";
+    document.getElementById('resMinVelocity').innerText = "-";
+    document.getElementById('resMaxVelocity').innerText = "-";
+    document.getElementById('resVelocityRange').innerText = "-";
+    document.getElementById('resFlowRange').innerText = "-";
+    document.getElementById('resRequiredAccuracy').innerText = "-";
+    document.getElementById('resMeterAccuracy').innerText = "-";
+    document.getElementById('resSystemAccuracy').innerText = "-";
+    document.getElementById('resComplianceStatus').innerText = "-";
+    document.getElementById('resMeterRange').innerText = "-";
+    document.getElementById('resAppFlow').innerText = "-";
+    document.getElementById('resMeterRangeStatus').innerText = "-";
+    document.getElementById('resFluidType').innerText = "-";
+    document.getElementById('resCondStatus').innerText = "-";
+    document.getElementById('resFluidCompatibility').innerText = "-";
+    document.getElementById('resPipeBeforeMM').innerText = "-";
+    document.getElementById('resPipeAfterMM').innerText = "-";
+    document.getElementById('resOrientation').innerText = "-";
+    document.getElementById('resInstallationImpact').innerText = "-";
+}
+
+// Save to offline history
+function saveToHistory() {
+    if (currentOutputs.flowNormal === '' || currentOutputs.flowNormal === '-') return;
+
+    let history = JSON.parse(localStorage.getItem('magFlowHistory')) || [];
+    history.push(currentOutputs);
+    localStorage.setItem('magFlowHistory', JSON.stringify(history));
+    renderHistory();
+}
+
+function clearHistory() {
+    if(confirm("Clear all calculation history?")) {
+        localStorage.removeItem('magFlowHistory');
+        renderHistory();
+    }
+}
+
+function renderHistory() {
+    let history = JSON.parse(localStorage.getItem('magFlowHistory')) || [];
+    let tbody = document.getElementById('historyTableBody');
+    tbody.innerHTML = '';
+
+    if (history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="no-data">No calculations saved</td></tr>`;
+        return;
+    }
+
+    // Display newest first
+    for (let i = history.length - 1; i >= 0; i--) {
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${history[i].diameter}</td>
+            <td>${history[i].flowNormal}</td>
+            <td>${history[i].velocityNormal}</td>
+            <td>${history[i].meterAccuracy}</td>
+            <td>${history[i].compliant}</td>
+        `;
+        tbody.appendChild(row);
+    }
+}
+
+// PDF Export Function
+function generatePDF() {
+    const element = document.querySelector('.calculator-card');
+    const timestamp = new Date().toLocaleString();
+    
+    let html = `
+    <h1 style="text-align: center; color: #0056b3; margin-bottom: 5px;">MAESTRO ASIA LDG Series Flowmeter Analysis Report</h1>
+    <p style="text-align: center; color: #666; font-size: 12px; margin-bottom: 20px;">Generated: ${timestamp}</p>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Pipe Configuration</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Diameter:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('diameter').value} ${document.getElementById('diameterUnit').value}</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">MAESTRO ASIA Meter Specifications</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Manufacturer:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">MAESTRO ASIA PTE LTD</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Series:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">LDG (Electromagnetic Flowmeter)</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Model Type:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterModel').value.toUpperCase()}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Accuracy Spec:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">±${document.getElementById('meterAccuracy').value}% of rate</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Repeatability:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">±${document.getElementById('meterRepeatability').value}%</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Velocity Range:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">0.3 - 10 m/s</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Operating Temperature:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">-20 to +60°C (Standard) / up to +90°C (with special liners)</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Minimum Conductivity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">5 µS/cm</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Electrode Material:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">SS316L / Tantalum / Hastelloy (selectable)</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Body Material:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">Stainless Steel</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Application Flow Range</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Min Flow (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterFlowMin').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Max Flow (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterFlowMax').value}</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Fluid Properties</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Fluid Type:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('fluidType').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Conductivity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('fluidConductivity').value} µS/cm</td>
+        </tr>
+        ${document.getElementById('fluidType').value === 'chemical' ? `
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Chemical Concentration:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('chemicalConcentration').value}%</td>
+        </tr>
+        ` : ''}
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Operational Conditions</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr style="background-color: #f0f0f0;">
+            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;"><strong>Parameter</strong></th>
+            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;"><strong>Min</strong></th>
+            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;"><strong>Normal</strong></th>
+            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;"><strong>Max</strong></th>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Pressure (bar)</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('pressureMin').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('pressureNormal').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('pressureMax').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Temperature (°C)</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('tempMin').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('tempNormal').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('tempMax').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Flow (${document.getElementById('flowUnit').value})</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('flowMin').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('flowNormal').value}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${document.getElementById('flowMax').value}</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Installation Details</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Pipe Length Before (DN):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('pipeLengthBefore').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Pipe Length After (DN):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('pipeLengthAfter').value}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Installation Orientation:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('installationOrientation').value.replace('_', ' ')}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Site Conditions:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('siteConditions').value}</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Accuracy Requirements</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Required Accuracy:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('requiredAccuracy').value}%</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Meter Accuracy:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('meterAccuracy').value}%</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Calculation Results</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Pipe Area:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resArea').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Calculated Velocity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resVelocity').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Flow Rate (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resLPM').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Flow Rate (m³/h):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resM3H').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Min Velocity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMinVelocity').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Max Velocity:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMaxVelocity').innerText}</td>
+        </tr>
+    </table>
+    
+    <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Compliance Analysis</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Meter Range (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMeterRange').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Application Flow (L/min):</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resAppFlow').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Flow Range Status:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resMeterRangeStatus').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Fluid Compatibility:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resFluidCompatibility').innerText}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Installation Impact:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resInstallationImpact').innerText}</td>
+        </tr>
+        <tr style="background-color: #f0f0f0; font-weight: bold;">
+            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Combined System Accuracy:</strong></td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resSystemAccuracy').innerText}</td>
+        </tr>
+        <tr style="background-color: #fff3cd; border: 2px solid #ffc107;">
+            <td style="padding: 12px; border: 1px solid #ddd;"><strong>Compliance Status:</strong></td>
+            <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold; font-size: 14px;">${document.getElementById('resComplianceStatus').innerText}</td>
+        </tr>
+    </table>
+    
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 11px;">
+        <p>This analysis report was generated by the MAESTRO ASIA LDG Series Flowmeter Calculator<br/>For technical support, contact MAESTRO ASIA PTE LTD</p>
+    </div>
+    `;
+    
+    const opt = {
+        margin: 10,
+        filename: 'FlowMeter_Report_' + new Date().toISOString().split('T')[0] + '.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+    };
+    
+    html2pdf().set(opt).fromString(html).save();
+}
+
+// Initialize on load
+window.addEventListener('load', function() {
+    calculateAll();
+    renderHistory();
+});
+</script>
+
+</body>
+</html>
