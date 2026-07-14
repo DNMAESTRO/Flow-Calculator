@@ -993,38 +993,57 @@ function renderHistory() {
 }
 
 function generatePDF() {
+    calculateAll();
+
+    const getText = (id) => {
+        const el = document.getElementById(id);
+        if (!el) return '-';
+        return el.innerText || el.textContent || '-';
+    };
+
     const timestamp = new Date().toLocaleString();
     const html = `
-    <div style="font-family: Arial, sans-serif; color: #222; line-height: 1.5;">
-        <h1 style="text-align: center; color: #0056b3; margin-bottom: 5px;">MAESTRO ASIA LDG Series Flowmeter Analysis Report</h1>
-        <p style="text-align: center; color: #666; font-size: 12px; margin-bottom: 20px;">Generated: ${timestamp}</p>
-        
-        <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Configuration Parameters</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-            <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Diameter:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('diameter').value} ${document.getElementById('diameterUnit').value}</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Meter Type:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">MAESTRO ASIA LDG-${document.getElementById('meterModel').value.toUpperCase()}</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Fluid Conductivity:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('fluidConductivity').value} µS/cm</td></tr>
-        </table>
-        
-        <h2 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-top: 20px;">Calculation Results</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-            <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Calculated Velocity:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resVelocity').innerText}</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>System Combined Performance Accuracy:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${document.getElementById('resSystemAccuracy').innerText}</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Compliance Evaluation:</strong></td><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">${document.getElementById('resComplianceStatus').innerText}</td></tr>
-        </table>
-    </div>
-    `;
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>MAESTRO Flowmeter Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; color: #222; padding: 24px; line-height: 1.5; }
+            h1 { text-align: center; color: #0056b3; margin-bottom: 6px; }
+            h2 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 8px; margin-top: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+            td { padding: 8px; border: 1px solid #ddd; }
+            .meta { text-align: center; color: #666; font-size: 12px; margin-bottom: 20px; }
+        </style>
+    </head>
+    <body>
+        <h1>MAESTRO ASIA LDG Series Flowmeter Analysis Report</h1>
+        <p class="meta">Generated: ${timestamp}</p>
 
-    const reportElement = document.createElement('div');
-    reportElement.innerHTML = html;
-    reportElement.style.position = 'fixed';
-    reportElement.style.left = '-9999px';
-    reportElement.style.top = '0';
-    reportElement.style.width = '794px';
-    reportElement.style.padding = '24px';
-    reportElement.style.background = '#ffffff';
-    reportElement.style.boxSizing = 'border-box';
-    document.body.appendChild(reportElement);
+        <h2>Configuration Parameters</h2>
+        <table>
+            <tr><td><strong>Diameter:</strong></td><td>${document.getElementById('diameter').value} ${document.getElementById('diameterUnit').value}</td></tr>
+            <tr><td><strong>Meter Type:</strong></td><td>MAESTRO ASIA LDG-${document.getElementById('meterModel').value.toUpperCase()}</td></tr>
+            <tr><td><strong>Fluid Type:</strong></td><td>${document.getElementById('fluidType').value}</td></tr>
+            <tr><td><strong>Fluid Conductivity:</strong></td><td>${document.getElementById('fluidConductivity').value} µS/cm</td></tr>
+            <tr><td><strong>Installation Orientation:</strong></td><td>${document.getElementById('installationOrientation').value}</td></tr>
+        </table>
+
+        <h2>Calculation Results</h2>
+        <table>
+            <tr><td><strong>Calculated Velocity:</strong></td><td>${getText('resVelocity')}</td></tr>
+            <tr><td><strong>Area:</strong></td><td>${getText('resArea')}</td></tr>
+            <tr><td><strong>Flow Range:</strong></td><td>${getText('resFlowRange')}</td></tr>
+            <tr><td><strong>System Combined Performance Accuracy:</strong></td><td>${getText('resSystemAccuracy')}</td></tr>
+            <tr><td><strong>Compliance Evaluation:</strong></td><td>${getText('resComplianceStatus')}</td></tr>
+            <tr><td><strong>Meter Range Compatibility:</strong></td><td>${getText('resMeterRangeStatus')}</td></tr>
+            <tr><td><strong>Fluid Compatibility:</strong></td><td>${getText('resFluidCompatibility')}</td></tr>
+            <tr><td><strong>Installation Impact:</strong></td><td>${getText('resInstallationImpact')}</td></tr>
+        </table>
+    </body>
+    </html>
+    `;
 
     const opt = {
         margin: 10,
@@ -1036,32 +1055,32 @@ function generatePDF() {
 
     try {
         if (typeof html2pdf !== 'undefined') {
-            const worker = html2pdf().set(opt).from(reportElement);
-            worker.save();
-            setTimeout(() => reportElement.remove(), 1500);
+            html2pdf().set(opt).fromString(html).save();
         } else {
             const printWindow = window.open('', '_blank', 'width=900,height=700');
             if (printWindow) {
-                printWindow.document.write('<html><head><title>Flowmeter Report</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222;} table{width:100%;border-collapse:collapse;} td{padding:8px;border:1px solid #ddd;}</style></head><body>' + html + '</body></html>');
+                printWindow.document.write(html);
                 printWindow.document.close();
                 printWindow.focus();
-                printWindow.print();
-                printWindow.onafterprint = () => printWindow.close();
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.onafterprint = () => printWindow.close();
+                }, 300);
             } else {
                 alert('Please allow pop-ups to export the report, or use the browser Print option to save as PDF.');
             }
-            reportElement.remove();
         }
     } catch (error) {
         console.error('PDF export failed:', error);
-        reportElement.remove();
         const printWindow = window.open('', '_blank', 'width=900,height=700');
         if (printWindow) {
-            printWindow.document.write('<html><head><title>Flowmeter Report</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222;} table{width:100%;border-collapse:collapse;} td{padding:8px;border:1px solid #ddd;}</style></head><body>' + html + '</body></html>');
+            printWindow.document.write(html);
             printWindow.document.close();
             printWindow.focus();
-            printWindow.print();
-            printWindow.onafterprint = () => printWindow.close();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.onafterprint = () => printWindow.close();
+            }, 300);
         } else {
             alert('The export could not start automatically. Please use your browser Print option and choose Save as PDF.');
         }
