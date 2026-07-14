@@ -585,6 +585,42 @@
             </div>
         </div>
 
+        <div style="background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 12px; border-radius: 4px; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #1b5e20;">📈 Accuracy at Flow Points</h4>
+            <div class="table-wrapper">
+                <table style="font-size: 13px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Flow Point</th>
+                            <th style="text-align: left;">Flow</th>
+                            <th style="text-align: left;">Accuracy</th>
+                            <th style="text-align: left;">Meets Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Low Flow</td>
+                            <td id="resLowFlowValue">-</td>
+                            <td id="resLowFlowAccuracy">-</td>
+                            <td id="resLowFlowStatus">-</td>
+                        </tr>
+                        <tr>
+                            <td>Normal Flow</td>
+                            <td id="resNormalFlowValue">-</td>
+                            <td id="resNormalFlowAccuracy">-</td>
+                            <td id="resNormalFlowStatus">-</td>
+                        </tr>
+                        <tr>
+                            <td>High Flow</td>
+                            <td id="resHighFlowValue">-</td>
+                            <td id="resHighFlowAccuracy">-</td>
+                            <td id="resHighFlowStatus">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div style="background: #e3f2fd; border-left: 4px solid var(--primary); padding: 12px; border-radius: 4px; margin-top: 15px;">
             <h4 style="margin: 0 0 10px 0; color: #01579b;">🔍 Meter Range Compatibility</h4>
             <div class="result-item">
@@ -820,6 +856,18 @@ function calculateAll() {
         tempMin, tempNormal, tempMax, siteConditions
     );
 
+    let lowFlowPenalty = flowMinLPM < meterFlowMinLPM ? 0.2 : 0;
+    let normalFlowPenalty = flowNormalLPM < meterFlowMinLPM || flowNormalLPM > meterFlowMaxLPM ? 0.2 : 0;
+    let highFlowPenalty = flowMaxLPM > meterFlowMaxLPM ? 0.2 : 0;
+
+    let lowFlowAccuracy = systemAccuracy + lowFlowPenalty;
+    let normalFlowAccuracy = systemAccuracy + normalFlowPenalty;
+    let highFlowAccuracy = systemAccuracy + highFlowPenalty;
+
+    let lowFlowMeets = lowFlowAccuracy <= requiredAccuracy;
+    let normalFlowMeets = normalFlowAccuracy <= requiredAccuracy;
+    let highFlowMeets = highFlowAccuracy <= requiredAccuracy;
+
     let meterRangeOK = (flowNormalLPM >= meterFlowMinLPM && flowNormalLPM <= meterFlowMaxLPM);
     let meterRangeStatus = meterRangeOK ? 
         `✓ OK (${flowNormalLPM.toFixed(1)} L/min within range)` :
@@ -860,6 +908,16 @@ function calculateAll() {
     document.getElementById('resMeterAccuracy').innerText = meterAccuracy.toFixed(2) + "%";
     document.getElementById('resSystemAccuracy').innerHTML = `<span class="${compliant ? 'accuracy-high' : 'accuracy-low'}">${systemAccuracy.toFixed(2)}%</span>`;
     document.getElementById('resComplianceStatus').innerHTML = `<span class="${complianceColor}">${complianceStatus}</span>`;
+
+    document.getElementById('resLowFlowValue').innerText = flowMinLPM.toFixed(2) + " L/min";
+    document.getElementById('resNormalFlowValue').innerText = flowNormalLPM.toFixed(2) + " L/min";
+    document.getElementById('resHighFlowValue').innerText = flowMaxLPM.toFixed(2) + " L/min";
+    document.getElementById('resLowFlowAccuracy').innerHTML = `<span class="${lowFlowMeets ? 'accuracy-high' : 'accuracy-low'}">${lowFlowAccuracy.toFixed(2)}%</span>`;
+    document.getElementById('resNormalFlowAccuracy').innerHTML = `<span class="${normalFlowMeets ? 'accuracy-high' : 'accuracy-low'}">${normalFlowAccuracy.toFixed(2)}%</span>`;
+    document.getElementById('resHighFlowAccuracy').innerHTML = `<span class="${highFlowMeets ? 'accuracy-high' : 'accuracy-low'}">${highFlowAccuracy.toFixed(2)}%</span>`;
+    document.getElementById('resLowFlowStatus').innerHTML = `<span class="${lowFlowMeets ? 'accuracy-high' : 'accuracy-low'}">${lowFlowMeets ? '✓ YES' : '✗ NO'}</span>`;
+    document.getElementById('resNormalFlowStatus').innerHTML = `<span class="${normalFlowMeets ? 'accuracy-high' : 'accuracy-low'}">${normalFlowMeets ? '✓ YES' : '✗ NO'}</span>`;
+    document.getElementById('resHighFlowStatus').innerHTML = `<span class="${highFlowMeets ? 'accuracy-high' : 'accuracy-low'}">${highFlowMeets ? '✓ YES' : '✗ NO'}</span>`;
 
     document.getElementById('resMeterRange').innerText = `${meterFlowMinLPM.toFixed(1)} - ${meterFlowMaxLPM.toFixed(1)} L/min`;
     document.getElementById('resAppFlow').innerText = `${flowMinLPM.toFixed(1)} - ${flowMaxLPM.toFixed(1)} L/min`;
@@ -948,7 +1006,7 @@ function calculateInstallationPenalty(orientation, siteConditions, pipeLengthBef
 }
 
 function clearResults() {
-    let cells = ['resArea', 'resVelocity', 'resLPM', 'resM3H', 'resMinVelocity', 'resMaxVelocity', 'resVelocityRange', 'resFlowRange', 'resRequiredAccuracy', 'resMeterAccuracy', 'resSystemAccuracy', 'resComplianceStatus', 'resMeterRange', 'resAppFlow', 'resMeterRangeStatus', 'resFluidType', 'resCondStatus', 'resFluidCompatibility', 'resPipeBeforeMM', 'resPipeAfterMM', 'resOrientation', 'resInstallationImpact'];
+    let cells = ['resArea', 'resVelocity', 'resLPM', 'resM3H', 'resMinVelocity', 'resMaxVelocity', 'resVelocityRange', 'resFlowRange', 'resRequiredAccuracy', 'resMeterAccuracy', 'resSystemAccuracy', 'resComplianceStatus', 'resLowFlowValue', 'resNormalFlowValue', 'resHighFlowValue', 'resLowFlowAccuracy', 'resNormalFlowAccuracy', 'resHighFlowAccuracy', 'resLowFlowStatus', 'resNormalFlowStatus', 'resHighFlowStatus', 'resMeterRange', 'resAppFlow', 'resMeterRangeStatus', 'resFluidType', 'resCondStatus', 'resFluidCompatibility', 'resPipeBeforeMM', 'resPipeAfterMM', 'resOrientation', 'resInstallationImpact'];
     cells.forEach(id => {
         document.getElementById(id).innerText = "-";
     });
@@ -1037,6 +1095,9 @@ function generatePDF() {
             <tr><td><strong>Flow Range:</strong></td><td>${getText('resFlowRange')}</td></tr>
             <tr><td><strong>System Combined Performance Accuracy:</strong></td><td>${getText('resSystemAccuracy')}</td></tr>
             <tr><td><strong>Compliance Evaluation:</strong></td><td>${getText('resComplianceStatus')}</td></tr>
+            <tr><td><strong>Low Flow Accuracy:</strong></td><td>${getText('resLowFlowAccuracy')} (${getText('resLowFlowStatus')})</td></tr>
+            <tr><td><strong>Normal Flow Accuracy:</strong></td><td>${getText('resNormalFlowAccuracy')} (${getText('resNormalFlowStatus')})</td></tr>
+            <tr><td><strong>High Flow Accuracy:</strong></td><td>${getText('resHighFlowAccuracy')} (${getText('resHighFlowStatus')})</td></tr>
             <tr><td><strong>Meter Range Compatibility:</strong></td><td>${getText('resMeterRangeStatus')}</td></tr>
             <tr><td><strong>Fluid Compatibility:</strong></td><td>${getText('resFluidCompatibility')}</td></tr>
             <tr><td><strong>Installation Impact:</strong></td><td>${getText('resInstallationImpact')}</td></tr>
