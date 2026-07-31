@@ -433,19 +433,36 @@
 
     <h3>🔧 Installation Details</h3>
 
+    <!-- NEW: Installation Diagram Type Selector -->
     <div class="parameter-section">
-        <label for="pipeLengthBefore">Pipe Length Before Meter (DN - Diameters)</label>
-        <span class="label-small">Straight pipe required upstream (typically 5-10 DN)</span>
+        <label for="pipingConfig">Pipeline Feature / Fitting Type (Section 4.2 Diagram 1)</label>
+        <span class="label-small">Select upstream/downstream piping layout</span>
         <div class="input-group">
-            <input type="number" id="pipeLengthBefore" value="10" step="1" min="0" oninput="calculateAll()">
+            <select id="pipingConfig" onchange="updatePipingPreset()">
+                <option value="gate_valve">Gate valve fully open (Inlet ≥ 5D, Outlet ≥ 2D)</option>
+                <option value="reducer">Reducer pipe (Inlet 0D allowable, Outlet 0D allowable)</option>
+                <option value="expander">Expander pipe (Inlet ≥ 10D, Outlet ≥ 2D)</option>
+                <option value="tee">Tee fitting (Inlet ≥ 5D, Outlet 0D allowable)</option>
+                <option value="bent">90-degree bent / Elbow (Inlet ≥ 5D, Outlet 0D allowable)</option>
+                <option value="valves">Various valves / Control valves (Inlet ≥ 10D, Outlet ≥ 2D)</option>
+                <option value="custom" selected>Custom straight lengths</option>
+            </select>
         </div>
     </div>
 
     <div class="parameter-section">
-        <label for="pipeLengthAfter">Pipe Length After Meter (DN - Diameters)</label>
-        <span class="label-small">Straight pipe required downstream (typically 3-5 DN)</span>
+        <label for="pipeLengthBefore">Pipe Length Before Meter (Inlet - DN)</label>
+        <span class="label-small">Straight pipe required upstream</span>
         <div class="input-group">
-            <input type="number" id="pipeLengthAfter" value="5" step="1" min="0" oninput="calculateAll()">
+            <input type="number" id="pipeLengthBefore" value="10" step="1" min="0" oninput="manualPipingInput()">
+        </div>
+    </div>
+
+    <div class="parameter-section">
+        <label for="pipeLengthAfter">Pipe Length After Meter (Outlet - DN)</label>
+        <span class="label-small">Straight pipe required downstream</span>
+        <div class="input-group">
+            <input type="number" id="pipeLengthAfter" value="5" step="1" min="0" oninput="manualPipingInput()">
         </div>
     </div>
 
@@ -572,7 +589,7 @@
                 <span class="value" id="resRequiredAccuracy">-</span>
             </div>
             <div class="result-item">
-                <span>Meter Accuracy:</span>
+                <span>Meter Base Accuracy:</span>
                 <span class="value" id="resMeterAccuracy">-</span>
             </div>
             <div class="result-item">
@@ -656,11 +673,11 @@
         <div style="background: #fce4ec; border-left: 4px solid #e91e63; padding: 12px; border-radius: 4px; margin-top: 15px;">
             <h4 style="margin: 0 0 10px 0; color: #880e4f;">🔧 Installation Requirements</h4>
             <div class="result-item">
-                <span>Pipe Length Before (mm):</span>
+                <span>Pipe Length Before (Inlet):</span>
                 <span class="value" id="resPipeBeforeMM">-</span>
             </div>
             <div class="result-item">
-                <span>Pipe Length After (mm):</span>
+                <span>Pipe Length After (Outlet):</span>
                 <span class="value" id="resPipeAfterMM">-</span>
             </div>
             <div class="result-item">
@@ -698,7 +715,7 @@
                 </tr>
             </thead>
             <tbody id="historyTableBody">
-                </tbody>
+            </tbody>
         </table>
     </div>
 </div>
@@ -723,6 +740,45 @@ function applyPreset() {
 
 function manualDiameterInput() {
     document.getElementById('pipePreset').value = "custom";
+    calculateAll();
+}
+
+function updatePipingPreset() {
+    let config = document.getElementById('pipingConfig').value;
+    let beforeInput = document.getElementById('pipeLengthBefore');
+    let afterInput = document.getElementById('pipeLengthAfter');
+
+    switch(config) {
+        case 'gate_valve':
+            beforeInput.value = 5;
+            afterInput.value = 2;
+            break;
+        case 'reducer':
+            beforeInput.value = 0;
+            afterInput.value = 0;
+            break;
+        case 'expander':
+            beforeInput.value = 10;
+            afterInput.value = 2;
+            break;
+        case 'tee':
+            beforeInput.value = 5;
+            afterInput.value = 0;
+            break;
+        case 'bent':
+            beforeInput.value = 5;
+            afterInput.value = 0;
+            break;
+        case 'valves':
+            beforeInput.value = 10;
+            afterInput.value = 2;
+            break;
+    }
+    calculateAll();
+}
+
+function manualPipingInput() {
+    document.getElementById('pipingConfig').value = 'custom';
     calculateAll();
 }
 
@@ -793,7 +849,6 @@ function calculateAll() {
     let flowMax = parseFloat(document.getElementById('flowMax').value);
     let flowUnit = document.getElementById('flowUnit').value;
     
-    let meterModel = document.getElementById('meterModel').value;
     let meterFlowMin = parseFloat(document.getElementById('meterFlowMin').value);
     let meterFlowMax = parseFloat(document.getElementById('meterFlowMax').value);
     let meterFlowUnit = document.getElementById('meterFlowUnit').value;
@@ -941,21 +996,22 @@ function calculateAll() {
     };
 }
 
+// FIX: Adjusted tempError coefficient from 0.1 to 0.01 per degree C
 function calculateSystemAccuracy(meterAcc, repeatability, pMin, pNormal, pMax, tMin, tNormal, tMax, siteConditions) {
     let baseAccuracy = meterAcc;
-    let repeatError = repeatability || 0.2;
+    let repeatError = repeatability || 0.1;
     
     let pressureDeviation = Math.max(Math.abs(pMin - pNormal), Math.abs(pMax - pNormal));
-    let pressureError = (pressureDeviation / 10) * 0.2;
+    let pressureError = (pressureDeviation / 10) * 0.05;
     
     let tempDeviation = Math.max(Math.abs(tMin - tNormal), Math.abs(tMax - tNormal));
-    let tempError = tempDeviation * 0.1;
+    let tempError = tempDeviation * 0.01; // Corrected from 0.1 to 0.01
     
     let siteConditionsPenalty = 0;
     switch(siteConditions) {
-        case 'good': siteConditionsPenalty = 0.1; break;
-        case 'moderate': siteConditionsPenalty = 0.3; break;
-        case 'harsh': siteConditionsPenalty = 0.5; break;
+        case 'good': siteConditionsPenalty = 0.05; break;
+        case 'moderate': siteConditionsPenalty = 0.15; break;
+        case 'harsh': siteConditionsPenalty = 0.3; break;
     }
     
     return Math.sqrt(
@@ -1085,6 +1141,7 @@ function generatePDF() {
             <tr><td><strong>Meter Type:</strong></td><td>MAESTRO ASIA LDG-${document.getElementById('meterModel').value.toUpperCase()}</td></tr>
             <tr><td><strong>Fluid Type:</strong></td><td>${document.getElementById('fluidType').value}</td></tr>
             <tr><td><strong>Fluid Conductivity:</strong></td><td>${document.getElementById('fluidConductivity').value} µS/cm</td></tr>
+            <tr><td><strong>Piping Configuration:</strong></td><td>${document.getElementById('pipingConfig').options[document.getElementById('pipingConfig').selectedIndex].text}</td></tr>
             <tr><td><strong>Installation Orientation:</strong></td><td>${document.getElementById('installationOrientation').value}</td></tr>
         </table>
 
